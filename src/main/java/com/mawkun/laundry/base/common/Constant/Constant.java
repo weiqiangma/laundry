@@ -6,32 +6,9 @@ public interface Constant {
     int STATUS_YES = 1;
 
     //=============================用户类型=============================//
-    //学生
-    int USER_TYPE_STUDENT           = 1;
-    //老师
-    int USER_TYPE_TEACHER           = 2;
-    //家长
-    int USER_TYPE_PARENT            = 3;
-    //访客
-    int USER_TYPE_GUEST             = 4;
-    //居民(需要进出学校运动的人)
-    int USER_TYPE_RESIDENT          = 7;
-
-    //userParent表：订阅短信 0 未订  1订购
-    int USERPARENT_NOT_ORDERSMS     =0 ;
-    int USERPARENT_ORDERSMS         =1 ;
-
-    // userParent表：主家长  0 非主家 1主家
-    int USERPARENT_NOT_MASTER        =0 ;
-    int USERPARENT_IS_MASTER         =1 ;
-
-    // 是否为班主任  0 非班主任 1班主任
-    int TEACHER_NOT_MASTER          =0 ;
-    int TEACHER_IS_MASTER           =1 ;
-
-    // 用户请假 开始请假事件 1 结束请假事件 2
-    int USER_LEAVE_START            = 1 ;
-    int USER_LEAVE_END              = 2 ;
+    int USER_TYPE_CUSTOMER = 1;//顾客
+    int USER_TYPE_DISTRIBUTOR = 2;//配送员
+    int USER_TYPE_ADMIN = 3;//管理员
 
     //=============================用户子类型=============================//
     int USER_TEA_SK_NORMAL          = 201;//普通教职工

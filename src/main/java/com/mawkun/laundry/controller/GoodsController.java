@@ -28,7 +28,7 @@ public class GoodsController extends BaseController {
 
     @RequestMapping("/get")
     public Goods getByEntity(@LoginedAuth UserSession session, Goods goods) {
-        String userName = session.getUserName();
+
         return goodsServiceExt.getByEntity(goods);
     }
 

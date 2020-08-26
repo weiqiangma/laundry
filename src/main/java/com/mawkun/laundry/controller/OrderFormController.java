@@ -1,6 +1,7 @@
 package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
+import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
 import org.springframework.web.bind.annotation.*;
@@ -25,37 +26,40 @@ public class OrderFormController extends BaseController {
     }
 
     @RequestMapping("/get")
-    public OrderForm getByEntity(OrderForm orderForm) {
-        return orderFormServiceExt.getByEntity(orderForm);
+    public JsonResult getByEntity(OrderForm orderForm) {
+        OrderForm resultForm = orderFormServiceExt.getByEntity(orderForm);
+        return sendSuccess(resultForm);
     }
 
     @RequestMapping("/list")
-    public List<OrderForm> list(OrderForm orderForm) {
+    public JsonResult list(OrderForm orderForm) {
         List<OrderForm> orderFormList = orderFormServiceExt.listByEntity(orderForm);
-        return orderFormList;
+        return sendSuccess(orderFormList);
     }
 
     @RequestMapping("/insert")
-    public OrderForm insert(@RequestBody OrderForm orderForm){
+    public JsonResult insert(@RequestBody OrderForm orderForm){
         orderFormServiceExt.insert(orderForm);
-        return orderForm;
+        return sendSuccess(orderForm);
     }
 
     @RequestMapping("/update")
-    public int update(@RequestBody OrderForm orderForm){
-        return orderFormServiceExt.update(orderForm);
+    public JsonResult update(@RequestBody OrderForm orderForm){
+        int result = orderFormServiceExt.update(orderForm);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete/{id}")
-    public int deleteOne(@PathVariable Long id){
-        return orderFormServiceExt.deleteById(id);
+    public JsonResult deleteOne(@PathVariable Long id){
+        int result = orderFormServiceExt.deleteById(id);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = orderFormServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mawkun.laundry.dao.OrderFormDaoExt">
+
+    <select id="statsShopIncome" resultType="com.mawkun.laundry.base.data.ShopIncomeData" parameterType="com.mawkun.laundry.base.data.query.ShopIncomeQuery">
+    SELECT
+        shop.id,
+        shop_name shopName,
+        ifnull( AVG( real_amount ), 0 ) amount
+    FROM
+        shop
+        LEFT JOIN order_form ON order_form.shop_id = shop.id
+    <where>
+        <if test="startTime != null and endTime != null">
+            AND order_form.create_time &gt;= #{startTime} AND order_form.create_time &lt;= #{endTime}
+        </if>
+        <if test="shopId != null">
+            AND shop.id = #{shopId}
+        </if>
+    </where>
+    GROUP BY
+        shop.id
+    </select>
+</mapper>

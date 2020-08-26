@@ -6,16 +6,17 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
         <result property="realName" column="real_name" jdbcType="VARCHAR"/>
-        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
         <result property="address" column="address" jdbcType="VARCHAR"/>
         <result property="kind" column="kind" jdbcType="INTEGER"/>
         <result property="sumOfMoney" column="sum_of_money" jdbcType="NUMERIC"/>
         <result property="integral" column="integral" jdbcType="INTEGER"/>
-        <result property="createTime" column="create_time" jdbcType="OTHER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="table_field">
-      id, user_name, real_name, phone, address, kind, sum_of_money, integral, create_time
+      id, user_name, real_name, mobile, address, kind, sum_of_money, integral, update_time, create_time      
     </sql>
        
     <!--通过Id查询单个-->
@@ -42,8 +43,8 @@
             <if test="realName != null">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null">
-                and phone = #{phone,jdbcType=VARCHAR}
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="address != null">
                 and address = #{address,jdbcType=VARCHAR}
@@ -57,8 +58,11 @@
             <if test="integral != null">
                 and integral = #{integral,jdbcType=INTEGER}
             </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
             <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -78,8 +82,8 @@
             <if test="realName != null">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null">
-                and phone = #{phone,jdbcType=VARCHAR}
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="address != null">
                 and address = #{address,jdbcType=VARCHAR}
@@ -93,8 +97,11 @@
             <if test="integral != null">
                 and integral = #{integral,jdbcType=INTEGER}
             </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
             <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -123,8 +130,8 @@
           <if test="realName != null">
              real_name,
           </if>
-          <if test="phone != null">
-             phone,
+          <if test="mobile != null">
+             mobile,
           </if>
           <if test="address != null">
              address,
@@ -137,6 +144,9 @@
           </if>
           <if test="integral != null">
              integral,
+          </if>
+          <if test="updateTime != null">
+             update_time,
           </if>
           <if test="createTime != null">
              create_time,
@@ -152,8 +162,8 @@
           <if test="realName != null">
              #{realName,jdbcType=VARCHAR},
           </if>
-          <if test="phone != null">
-             #{phone,jdbcType=VARCHAR},
+          <if test="mobile != null">
+             #{mobile,jdbcType=VARCHAR},
           </if>
           <if test="address != null">
              #{address,jdbcType=VARCHAR},
@@ -167,8 +177,11 @@
           <if test="integral != null">
              #{integral,jdbcType=INTEGER},
           </if>
+          <if test="updateTime != null">
+             #{updateTime,jdbcType=TIMESTAMP},
+          </if>
           <if test="createTime != null">
-             #{createTime,jdbcType=OTHER},
+             #{createTime,jdbcType=TIMESTAMP},
           </if>
         </trim>
     </insert>
@@ -176,10 +189,10 @@
     <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into user
-         (id, user_name, real_name, phone, address, kind, sum_of_money, integral, create_time)
+         (id, user_name, real_name, mobile, address, kind, sum_of_money, integral, update_time, create_time)
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-         (#{item.id,jdbcType=INTEGER}, #{item.userName,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.kind,jdbcType=INTEGER}, #{item.sumOfMoney,jdbcType=NUMERIC}, #{item.integral,jdbcType=INTEGER}, #{item.createTime,jdbcType=OTHER})
+         (#{item.id,jdbcType=INTEGER}, #{item.userName,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.mobile,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.kind,jdbcType=INTEGER}, #{item.sumOfMoney,jdbcType=NUMERIC}, #{item.integral,jdbcType=INTEGER}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 
@@ -193,8 +206,8 @@
             <if test="realName != null and realName != ''">
                 real_name = #{realName,jdbcType=VARCHAR},
             </if>
-            <if test="phone != null and phone != ''">
-                phone = #{phone,jdbcType=VARCHAR},
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile,jdbcType=VARCHAR},
             </if>
             <if test="address != null and address != ''">
                 address = #{address,jdbcType=VARCHAR},
@@ -208,8 +221,11 @@
             <if test="integral != null">
                 integral = #{integral,jdbcType=INTEGER},
             </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="createTime != null">
-                create_time = #{createTime,jdbcType=OTHER},
+                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -225,8 +241,8 @@
             <if test="where.realName == null and set.realName != null and set.realName != ''">
                 real_name = #{set.realName,jdbcType=VARCHAR},
             </if>
-            <if test="where.phone == null and set.phone != null and set.phone != ''">
-                phone = #{set.phone,jdbcType=VARCHAR},
+            <if test="where.mobile == null and set.mobile != null and set.mobile != ''">
+                mobile = #{set.mobile,jdbcType=VARCHAR},
             </if>
             <if test="where.address == null and set.address != null and set.address != ''">
                 address = #{set.address,jdbcType=VARCHAR},
@@ -240,8 +256,11 @@
             <if test="where.integral == null and set.integral != null">
                 integral = #{set.integral,jdbcType=INTEGER},
             </if>
+            <if test="where.updateTime == null and set.updateTime != null">
+                update_time = #{set.updateTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="where.createTime == null and set.createTime != null">
-                create_time = #{set.createTime,jdbcType=OTHER},
+                create_time = #{set.createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         <where>
@@ -254,8 +273,8 @@
             <if test="where.realName != null">
                 and real_name = #{where.realName,jdbcType=VARCHAR}
             </if>
-            <if test="where.phone != null">
-                and phone = #{where.phone,jdbcType=VARCHAR}
+            <if test="where.mobile != null">
+                and mobile = #{where.mobile,jdbcType=VARCHAR}
             </if>
             <if test="where.address != null">
                 and address = #{where.address,jdbcType=VARCHAR}
@@ -269,8 +288,11 @@
             <if test="where.integral != null">
                 and integral = #{where.integral,jdbcType=INTEGER}
             </if>
+            <if test="where.updateTime != null">
+                and update_time = #{where.updateTime,jdbcType=TIMESTAMP}
+            </if>
             <if test="where.createTime != null">
-                and create_time = #{where.createTime,jdbcType=OTHER}
+                and create_time = #{where.createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </update>
@@ -289,9 +311,9 @@
                   when id = #{item.id} then #{item.realName}
                  </foreach>
             </trim>
-            <trim prefix="phone = case" suffix="end,">
+            <trim prefix="mobile = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when id = #{item.id} then #{item.phone}
+                  when id = #{item.id} then #{item.mobile}
                  </foreach>
             </trim>
             <trim prefix="address = case" suffix="end,">
@@ -312,6 +334,11 @@
             <trim prefix="integral = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
                   when id = #{item.id} then #{item.integral}
+                 </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.updateTime}
                  </foreach>
             </trim>
             <trim prefix="create_time = case" suffix="end,">
@@ -341,8 +368,8 @@
             <if test="realName != null">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null">
-                and phone = #{phone,jdbcType=VARCHAR}
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="address != null">
                 and address = #{address,jdbcType=VARCHAR}
@@ -356,8 +383,11 @@
             <if test="integral != null">
                 and integral = #{integral,jdbcType=INTEGER}
             </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
             <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </delete>
@@ -386,8 +416,8 @@
             <if test="realName != null">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null">
-                and phone = #{phone,jdbcType=VARCHAR}
+            <if test="mobile != null">
+                and mobile = #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="address != null">
                 and address = #{address,jdbcType=VARCHAR}
@@ -401,8 +431,11 @@
             <if test="integral != null">
                 and integral = #{integral,jdbcType=INTEGER}
             </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
             <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>

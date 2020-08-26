@@ -1,6 +1,7 @@
 package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
+import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OrderClothes;
 import com.mawkun.laundry.service.OrderClothesServiceExt;
 import org.springframework.web.bind.annotation.*;
@@ -19,43 +20,46 @@ public class OrderClothesController extends BaseController {
     private OrderClothesServiceExt orderClothesServiceExt;
 
     @RequestMapping("/get/{id}")
-    public OrderClothes getById(@PathVariable Long id) {
+    public JsonResult getById(@PathVariable Long id) {
         OrderClothes orderClothes = orderClothesServiceExt.getById(id);
-        return orderClothes!=null?orderClothes:new OrderClothes();
+        return sendSuccess(orderClothes);
     }
 
     @RequestMapping("/get")
-    public OrderClothes getByEntity(OrderClothes orderClothes) {
-        return orderClothesServiceExt.getByEntity(orderClothes);
+    public JsonResult getByEntity(OrderClothes orderClothes) {
+        OrderClothes resultOrderClothes = orderClothesServiceExt.getByEntity(orderClothes);
+        return sendSuccess(resultOrderClothes);
     }
 
     @RequestMapping("/list")
-    public List<OrderClothes> list(OrderClothes orderClothes) {
+    public JsonResult list(OrderClothes orderClothes) {
         List<OrderClothes> orderClothesList = orderClothesServiceExt.listByEntity(orderClothes);
-        return orderClothesList;
+        return sendSuccess(orderClothesList);
     }
 
     @RequestMapping("/insert")
-    public OrderClothes insert(@RequestBody OrderClothes orderClothes){
+    public JsonResult insert(OrderClothes orderClothes){
         orderClothesServiceExt.insert(orderClothes);
-        return orderClothes;
+        return sendSuccess(orderClothes);
     }
 
     @RequestMapping("/update")
-    public int update(@RequestBody OrderClothes orderClothes){
-        return orderClothesServiceExt.update(orderClothes);
+    public JsonResult update(@RequestBody OrderClothes orderClothes){
+        int result = orderClothesServiceExt.update(orderClothes);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete/{id}")
-    public int deleteOne(@PathVariable Long id){
-        return orderClothesServiceExt.deleteById(id);
+    public JsonResult deleteOne(@PathVariable Long id){
+        int result = orderClothesServiceExt.deleteById(id);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = orderClothesServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 
 }

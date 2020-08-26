@@ -2,6 +2,8 @@ package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
+import com.mawkun.laundry.base.data.ShopIncomeData;
+import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
 import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.service.ShopServiceExt;
 import org.springframework.web.bind.annotation.*;
@@ -51,17 +53,28 @@ public class ShopController extends BaseController {
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete/{id}")
-    public JsonResult deleteOne(@PathVariable Long id){
+    @RequestMapping("/delete")
+    public JsonResult deleteOne(Long id){
         int result = shopServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    @RequestMapping("/deleteBatch")
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = shopServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
+    }
+
+    /**
+     * 统计门店收入
+     * @param query
+     * @return
+     */
+    @RequestMapping("/statsShopIncome")
+    public JsonResult statsShopIncome(ShopIncomeQuery query) {
+        List<ShopIncomeData> list = shopServiceExt.statsShopIncome(query);
+        return sendSuccess(list);
     }
 
 }

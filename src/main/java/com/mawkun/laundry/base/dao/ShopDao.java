@@ -4,6 +4,7 @@ import com.mawkun.laundry.base.entity.Shop;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.*;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @author mawkun
  * @date 2020-08-19 20:42:37
  */
+@Repository
 public interface ShopDao {
 
     Shop getById(@NotNull Long id);

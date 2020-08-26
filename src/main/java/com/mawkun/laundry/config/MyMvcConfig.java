@@ -2,16 +2,20 @@ package com.mawkun.laundry.config;
 
 import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.service.UserCacheService;
+import com.mawkun.laundry.spring.interpectors.AuthenticationInterceptor;
 import com.mawkun.laundry.spring.interpectors.UserLoginInterceptor;
 import com.mawkun.laundry.spring.resolver.LoginArgumentResolver;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import java.net.Authenticator;
 import java.util.List;
 
 @Slf4j
@@ -21,31 +25,11 @@ public class MyMvcConfig extends WebMvcConfigurationSupport {
     @Autowired
     private UserCacheService userCacheService;
 
-    /**
-     * 注入获取登录解析
-     *
-     * @return LoginArgumentResolver
-     */
-    public LoginArgumentResolver createLoginArgumentResolver() {
-        return new LoginArgumentResolver<UserSession>() {
-            @Override
-            public UserSession getUserSession(String token) {
-                return userCacheService.getUserSession(token);
-            }
-
-            @Override
-            public String authorizationToToken(String authorization) throws Exception {
-                return authorization;
-            }
-        };
-    }
-
     @Override
     protected void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(createLoginArgumentResolver());
+        argumentResolvers.add(new LoginArgumentResolver());
         super.addArgumentResolvers(argumentResolvers);
     }
-
 
     //解决跨域问题
     @Override
@@ -55,14 +39,19 @@ public class MyMvcConfig extends WebMvcConfigurationSupport {
     }
 
     //创建登录拦截器并注入userCacheService
-    private UserLoginInterceptor createLoginInterceptor() {
+    @Bean
+    UserLoginInterceptor createLoginInterceptor() {
         return new UserLoginInterceptor(userCacheService);
     }
+    //认证的拦截器，将用户session存在request，后续登录注解解析有用到
+    @Bean
+    AuthenticationInterceptor createAuthenticationInterceptor() {return new AuthenticationInterceptor(); }
 
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(createLoginInterceptor()).addPathPatterns("/adm/**");
+        registry.addInterceptor(createAuthenticationInterceptor());
         super.addInterceptors(registry);
     }
 }
