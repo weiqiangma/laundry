@@ -1,6 +1,7 @@
 package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
+import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.entity.Goods;
 import com.mawkun.laundry.service.GoodsServiceExt;
@@ -27,50 +28,51 @@ public class GoodsController extends BaseController {
     @GetMapping("/get")
     @ApiOperation(value="根据id获取商品", notes="根据id获取商品")
     @ApiImplicitParam(name = "id", value = "商品ID", dataType = "Long", paramType = "header")
-    public Goods getById(Long id) {
+    public JsonResult getById(Long id) {
         Goods goods = goodsServiceExt.getById(id);
-        return goods!=null?goods:new Goods();
+        return sendSuccess(goods);
     }
 
     @GetMapping("/getByEntity")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    public Goods getByEntity(@LoginedAuth UserSession session, Goods goods) {
-
-        return goodsServiceExt.getByEntity(goods);
+    @ApiOperation(value="根据entity获取商品", notes="根据entity获取商品")
+    public JsonResult getByEntity(Goods goods) {
+        Goods resultGoods =  goodsServiceExt.getByEntity(goods);
+        return sendSuccess(resultGoods);
     }
 
     @GetMapping("/list")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    public List<Goods> list(Goods goods) {
+    @ApiOperation(value="根据entity获取商品list", notes="根据entity获取商品list")
+    public JsonResult list(Goods goods) {
         List<Goods> goodsList = goodsServiceExt.listByEntity(goods);
-        return goodsList;
+        return sendSuccess(goodsList);
     }
 
     @PostMapping("/insert")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    public Goods insert(Goods goods){
+    @ApiOperation(value="添加商品", notes="添加商品")
+    public JsonResult insert(Goods goods){
         goodsServiceExt.insert(goods);
-        return goods;
+        return sendSuccess(goods);
     }
 
     @PostMapping("/update")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    public int update(Goods goods){
-        return goodsServiceExt.update(goods);
+    @ApiOperation(value="编辑商品", notes="编辑商品")
+    public JsonResult update(Goods goods){
+        int result = goodsServiceExt.update(goods);
+        return sendSuccess(result);
     }
 
     @GetMapping("/delete")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    @ApiImplicitParam(name = "id", value = "商品ID", dataType = "Long", paramType = "header")
-    public int deleteOne(Long id){
-        return goodsServiceExt.deleteById(id);
+    @ApiOperation(value="删除商品", notes="删除商品")
+    public JsonResult deleteOne(Long id){
+        int result = goodsServiceExt.deleteById(id);
+        return sendSuccess(result);
     }
 
     @GetMapping("/deleteBatch")
-    @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    @ApiOperation(value="批量删除商品", notes="批量删除商品")
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = goodsServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 }

@@ -21,13 +21,13 @@ public class OrderClothesController extends BaseController {
     @Autowired
     private OrderClothesServiceExt orderClothesServiceExt;
 
-    @RequestMapping("/get/{id}")
-    public JsonResult getById(@PathVariable Long id) {
+    @RequestMapping("/get")
+    public JsonResult getById(Long id) {
         OrderClothes orderClothes = orderClothesServiceExt.getById(id);
         return sendSuccess(orderClothes);
     }
 
-    @RequestMapping("/get")
+    @RequestMapping("/getByEntity")
     public JsonResult getByEntity(OrderClothes orderClothes) {
         OrderClothes resultOrderClothes = orderClothesServiceExt.getByEntity(orderClothes);
         return sendSuccess(resultOrderClothes);

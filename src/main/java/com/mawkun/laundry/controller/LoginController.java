@@ -14,6 +14,7 @@ import com.mawkun.laundry.service.AdminServiceExt;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.xiaoleilu.hutool.crypto.SecureUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 @Controller
-@Api(value="登录controller",tags={"登录操作接口"})
+@Api(tags={"登录操作接口"})
 public class LoginController extends BaseController {
 
     @Autowired
@@ -41,6 +42,7 @@ public class LoginController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/login")
+    @ApiOperation(value="登录接口", notes="登录接口")
     public JsonResult login(String userName, String password) {
         if (userName == null || password == null) return sendArgsError();
         password = CryptUtils.md5Safe(password);
@@ -64,6 +66,7 @@ public class LoginController extends BaseController {
     }
 
     @RequestMapping("/export")
+    @ApiOperation(value="用户信息导出excel", notes="用户信息导出excel")
     public JsonResult export(User user, HttpServletResponse response) {
         List<User> list = userServiceExt.listByEntity(user);
         try(OutputStream outputStream = response.getOutputStream()) {

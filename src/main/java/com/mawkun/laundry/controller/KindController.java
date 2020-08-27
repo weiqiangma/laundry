@@ -1,9 +1,11 @@
 package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
+import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.Kind;
 import com.mawkun.laundry.service.KindServiceExt;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -14,50 +16,59 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/kind")
-@Api(value="商品类型controller",tags={"商品类型操作接口"})
+@Api(tags={"商品类型操作接口"})
 public class KindController extends BaseController {
     
     @Autowired
     private KindServiceExt kindServiceExt;
 
-    @RequestMapping("/get/{id}")
-    public Kind getById(@PathVariable Long id) {
+    @RequestMapping("/get")
+    @ApiOperation(value="根据id获取商品类型", notes="根据id获取商品类型")
+    public JsonResult getById(Long id) {
         Kind kind = kindServiceExt.getById(id);
-        return kind!=null?kind:new Kind();
+        return sendSuccess(kind);
     }
 
-    @RequestMapping("/get")
-    public Kind getByEntity(Kind kind) {
-        return kindServiceExt.getByEntity(kind);
+    @RequestMapping("/getByEntity")
+    @ApiOperation(value="根据entity获取商品类型", notes="根据entity获取商品类型")
+    public JsonResult getByEntity(Kind kind) {
+        Kind kindResult = kindServiceExt.getByEntity(kind);
+        return sendSuccess(kindResult);
     }
 
     @RequestMapping("/list")
-    public List<Kind> list(Kind kind) {
+    @ApiOperation(value="根据entity获取商品list", notes="根据entity获取商品list")
+    public JsonResult list(Kind kind) {
         List<Kind> kindList = kindServiceExt.listByEntity(kind);
-        return kindList;
+        return sendSuccess(kindList);
     }
 
     @RequestMapping("/insert")
-    public Kind insert(@RequestBody Kind kind){
+    @ApiOperation(value="根据entity添加商品类型", notes="根据entity添加商品类型")
+    public JsonResult insert(Kind kind){
         kindServiceExt.insert(kind);
-        return kind;
+        return sendSuccess(kind);
     }
 
     @RequestMapping("/update")
-    public int update(@RequestBody Kind kind){
-        return kindServiceExt.update(kind);
-    }
-
-    @RequestMapping("/delete/{id}")
-    public int deleteOne(@PathVariable Long id){
-        return kindServiceExt.deleteById(id);
+    @ApiOperation(value="根据entity编辑商品类型", notes="根据entity编辑商品类型")
+    public JsonResult update(Kind kind){
+        int result = kindServiceExt.update(kind);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    @ApiOperation(value="根据id删除商品类型", notes="根据id删除商品类型")
+    public JsonResult deleteOne(Long id){
+        int result = kindServiceExt.deleteById(id);
+        return sendSuccess(result);
+    }
+
+    @RequestMapping("/deleteBatch")
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = kindServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 
 }

@@ -1,7 +1,9 @@
 package com.mawkun.laundry.base.data;
 
 import com.mawkun.laundry.base.entity.Admin;
+import springfox.documentation.annotations.ApiIgnore;
 
+@ApiIgnore
 public class UserSession {
 
     private Long id;

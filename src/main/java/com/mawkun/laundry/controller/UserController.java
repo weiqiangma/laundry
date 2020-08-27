@@ -9,6 +9,7 @@ import com.mawkun.laundry.base.entity.User;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,52 +23,60 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/user")
-@Api(value="用户controller",tags={"用户操作接口"})
+@Api(tags={"用户操作接口"})
 public class UserController extends BaseController {
     
     @Autowired
     private UserServiceExt userServiceExt;
 
-    @RequestMapping("/get/{id}")
-    public User getById(@PathVariable Long id) {
+    @RequestMapping("/get")
+    @ApiOperation(value="用户详情", notes="用户详情")
+    public JsonResult getById(Long id) {
         User user = userServiceExt.getById(id);
-        return user!=null?user:new User();
+        return sendSuccess(user);
     }
 
     @RequestMapping("/get")
+    @ApiOperation(value="用户详情", notes="用户详情")
     public JsonResult getByEntity(@LoginedAuth UserSession session, User user) {
-        session.getUserName();
         User resultUser = userServiceExt.getByEntity(user);
         return sendSuccess(resultUser);
     }
 
     @RequestMapping("/list")
+    @ApiOperation(value="用户列表", notes="用户列表")
     public JsonResult list(User user) {
         List<User> userList = userServiceExt.listByEntity(user);
         return sendSuccess(userList);
     }
 
     @RequestMapping("/insert")
+    @ApiOperation(value="添加用户", notes="添加用户")
     public JsonResult insert(User user){
         int result = userServiceExt.insert(user);
         return sendSuccess(result);
     }
 
     @RequestMapping("/update")
-    public int update(@RequestBody User user){
-        return userServiceExt.update(user);
-    }
-
-    @RequestMapping("/delete/{id}")
-    public int deleteOne(@PathVariable Long id){
-        return userServiceExt.deleteById(id);
+    @ApiOperation(value="编辑用户", notes="编辑用户")
+    public JsonResult update(User user){
+        int result = userServiceExt.update(user);
+        return sendSuccess(result);
     }
 
     @RequestMapping("/delete")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    @ApiOperation(value="删除用户", notes="删除用户")
+    public JsonResult deleteOne(Long id){
+        int result = userServiceExt.deleteById(id);
+        return sendSuccess(result);
+    }
+
+    @RequestMapping("/deleteBatch")
+    @ApiOperation(value="批量删除用户", notes="批量删除用户")
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = userServiceExt.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 
     @RequestMapping("/export")

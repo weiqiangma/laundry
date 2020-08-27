@@ -5,6 +5,7 @@ import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -15,49 +16,56 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/orderForm")
-@Api(value="订单controller",tags={"订单操作接口"})
+@Api(tags={"订单操作接口"})
 public class OrderFormController extends BaseController {
     
     @Autowired
     private OrderFormServiceExt orderFormServiceExt;
 
-    @RequestMapping("/get/{id}")
-    public OrderForm getById(@PathVariable Long id) {
+    @RequestMapping("/get")
+    @ApiOperation(value="根据id获取订单", notes="根据id获取订单")
+    public OrderForm getById(Long id) {
         OrderForm orderForm = orderFormServiceExt.getById(id);
         return orderForm!=null?orderForm:new OrderForm();
     }
 
-    @RequestMapping("/get")
+    @RequestMapping("/getByEntity")
+    @ApiOperation(value="根据entity获取订单", notes="根据entity获取订单")
     public JsonResult getByEntity(OrderForm orderForm) {
         OrderForm resultForm = orderFormServiceExt.getByEntity(orderForm);
         return sendSuccess(resultForm);
     }
 
     @RequestMapping("/list")
+    @ApiOperation(value="获取订单列表", notes="获取订单列表")
     public JsonResult list(OrderForm orderForm) {
         List<OrderForm> orderFormList = orderFormServiceExt.listByEntity(orderForm);
         return sendSuccess(orderFormList);
     }
 
     @RequestMapping("/insert")
-    public JsonResult insert(@RequestBody OrderForm orderForm){
+    @ApiOperation(value="添加订单", notes="添加订单")
+    public JsonResult insert(OrderForm orderForm){
         orderFormServiceExt.insert(orderForm);
         return sendSuccess(orderForm);
     }
 
     @RequestMapping("/update")
-    public JsonResult update(@RequestBody OrderForm orderForm){
+    @ApiOperation(value="编辑订单", notes="编辑订单")
+    public JsonResult update(OrderForm orderForm){
         int result = orderFormServiceExt.update(orderForm);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete/{id}")
-    public JsonResult deleteOne(@PathVariable Long id){
+    @RequestMapping("/delete")
+    @ApiOperation(value="删除订单", notes="删除订单")
+    public JsonResult deleteOne(Long id){
         int result = orderFormServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
+    @RequestMapping("/deleteBatch")
+    @ApiOperation(value="批量删除订单", notes="批量删除订单")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = orderFormServiceExt.deleteByIds(ids);
