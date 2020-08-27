@@ -21,43 +21,43 @@ public class OrderClothesController extends BaseController {
     @Autowired
     private OrderClothesServiceExt orderClothesServiceExt;
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     public JsonResult getById(Long id) {
         OrderClothes orderClothes = orderClothesServiceExt.getById(id);
         return sendSuccess(orderClothes);
     }
 
-    @RequestMapping("/getByEntity")
+    @GetMapping("/getByEntity")
     public JsonResult getByEntity(OrderClothes orderClothes) {
         OrderClothes resultOrderClothes = orderClothesServiceExt.getByEntity(orderClothes);
         return sendSuccess(resultOrderClothes);
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     public JsonResult list(OrderClothes orderClothes) {
         List<OrderClothes> orderClothesList = orderClothesServiceExt.listByEntity(orderClothes);
         return sendSuccess(orderClothesList);
     }
 
-    @RequestMapping("/insert")
+    @PostMapping("/insert")
     public JsonResult insert(OrderClothes orderClothes){
         orderClothesServiceExt.insert(orderClothes);
         return sendSuccess(orderClothes);
     }
 
-    @RequestMapping("/update")
+    @PutMapping("/update")
     public JsonResult update(@RequestBody OrderClothes orderClothes){
         int result = orderClothesServiceExt.update(orderClothes);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public JsonResult deleteOne(@PathVariable Long id){
         int result = orderClothesServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = orderClothesServiceExt.deleteByIds(ids);

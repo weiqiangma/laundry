@@ -26,49 +26,49 @@ public class ShopController extends BaseController {
     @Autowired
     private ShopServiceExt shopServiceExt;
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     @ApiOperation(value="门店详情", notes="门店详情")
     public Shop getById(Long id) {
         Shop shop = shopServiceExt.getById(id);
         return shop!=null?shop:new Shop();
     }
 
-    @RequestMapping("/getByEntity")
+    @GetMapping("/getByEntity")
     @ApiOperation(value="门店详情", notes="门店详情")
     public JsonResult getByEntity(Shop shop) {
         Shop resultShop = shopServiceExt.getByEntity(shop);
         return sendSuccess(resultShop);
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ApiOperation(value="门店列表", notes="门店列表")
     public JsonResult list(Shop shop) {
         List<Shop> shopList = shopServiceExt.listByEntity(shop);
         return sendSuccess(shopList);
     }
 
-    @RequestMapping("/insert")
+    @PostMapping("/insert")
     @ApiOperation(value="添加门店", notes="添加门店")
     public JsonResult insert(Shop shop, MultipartFile[] file){
         int result = shopServiceExt.insertWithPic(shop, file);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value="编辑门店", notes="编辑门店")
     public JsonResult update(Shop shop){
         int result = shopServiceExt.update(shop);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value="删除门店", notes="删除门店")
     public JsonResult deleteOne(Long id){
         int result = shopServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除门店", notes="批量删除门店")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
@@ -81,7 +81,7 @@ public class ShopController extends BaseController {
      * @param query
      * @return
      */
-    @RequestMapping("/statsShopIncome")
+    @GetMapping("/statsShopIncome")
     @ApiOperation(value="统计门店收入", notes="统计门店收入")
     public JsonResult statsShopIncome(ShopIncomeQuery query) {
         List<ShopIncomeData> list = shopServiceExt.statsShopIncome(query);

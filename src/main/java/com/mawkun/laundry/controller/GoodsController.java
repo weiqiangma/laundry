@@ -54,21 +54,21 @@ public class GoodsController extends BaseController {
         return sendSuccess(goods);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value="编辑商品", notes="编辑商品")
     public JsonResult update(Goods goods){
         int result = goodsServiceExt.update(goods);
         return sendSuccess(result);
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value="删除商品", notes="删除商品")
     public JsonResult deleteOne(Long id){
         int result = goodsServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @GetMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除商品", notes="批量删除商品")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;

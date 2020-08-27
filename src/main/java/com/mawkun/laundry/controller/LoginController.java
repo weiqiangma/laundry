@@ -17,10 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
@@ -41,7 +38,7 @@ public class LoginController extends BaseController {
     UserServiceExt userServiceExt;
 
     @ResponseBody
-    @RequestMapping(value = "/login")
+    @PostMapping(value = "/login")
     @ApiOperation(value="登录接口", notes="登录接口")
     public JsonResult login(String userName, String password) {
         if (userName == null || password == null) return sendArgsError();
@@ -65,7 +62,7 @@ public class LoginController extends BaseController {
         return sendSuccess(item);
     }
 
-    @RequestMapping("/export")
+    @GetMapping("/export")
     @ApiOperation(value="用户信息导出excel", notes="用户信息导出excel")
     public JsonResult export(User user, HttpServletResponse response) {
         List<User> list = userServiceExt.listByEntity(user);

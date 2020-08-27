@@ -22,49 +22,49 @@ public class KindController extends BaseController {
     @Autowired
     private KindServiceExt kindServiceExt;
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     @ApiOperation(value="根据id获取商品类型", notes="根据id获取商品类型")
     public JsonResult getById(Long id) {
         Kind kind = kindServiceExt.getById(id);
         return sendSuccess(kind);
     }
 
-    @RequestMapping("/getByEntity")
+    @GetMapping("/getByEntity")
     @ApiOperation(value="根据entity获取商品类型", notes="根据entity获取商品类型")
     public JsonResult getByEntity(Kind kind) {
         Kind kindResult = kindServiceExt.getByEntity(kind);
         return sendSuccess(kindResult);
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ApiOperation(value="根据entity获取商品list", notes="根据entity获取商品list")
     public JsonResult list(Kind kind) {
         List<Kind> kindList = kindServiceExt.listByEntity(kind);
         return sendSuccess(kindList);
     }
 
-    @RequestMapping("/insert")
+    @PostMapping("/insert")
     @ApiOperation(value="根据entity添加商品类型", notes="根据entity添加商品类型")
     public JsonResult insert(Kind kind){
         kindServiceExt.insert(kind);
         return sendSuccess(kind);
     }
 
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value="根据entity编辑商品类型", notes="根据entity编辑商品类型")
     public JsonResult update(Kind kind){
         int result = kindServiceExt.update(kind);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value="根据id删除商品类型", notes="根据id删除商品类型")
     public JsonResult deleteOne(Long id){
         int result = kindServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = kindServiceExt.deleteByIds(ids);

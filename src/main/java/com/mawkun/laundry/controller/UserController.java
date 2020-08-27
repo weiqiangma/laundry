@@ -29,49 +29,49 @@ public class UserController extends BaseController {
     @Autowired
     private UserServiceExt userServiceExt;
 
-    @RequestMapping("/get")
+    @GetMapping("/get")
     @ApiOperation(value="用户详情", notes="用户详情")
     public JsonResult getById(Long id) {
         User user = userServiceExt.getById(id);
         return sendSuccess(user);
     }
 
-    @RequestMapping("/get")
+    @GetMapping("/getByEntity")
     @ApiOperation(value="用户详情", notes="用户详情")
     public JsonResult getByEntity(@LoginedAuth UserSession session, User user) {
         User resultUser = userServiceExt.getByEntity(user);
         return sendSuccess(resultUser);
     }
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ApiOperation(value="用户列表", notes="用户列表")
     public JsonResult list(User user) {
         List<User> userList = userServiceExt.listByEntity(user);
         return sendSuccess(userList);
     }
 
-    @RequestMapping("/insert")
+    @PostMapping("/insert")
     @ApiOperation(value="添加用户", notes="添加用户")
     public JsonResult insert(User user){
         int result = userServiceExt.insert(user);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value="编辑用户", notes="编辑用户")
     public JsonResult update(User user){
         int result = userServiceExt.update(user);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value="删除用户", notes="删除用户")
     public JsonResult deleteOne(Long id){
         int result = userServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
-    @RequestMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除用户", notes="批量删除用户")
     public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
@@ -79,7 +79,7 @@ public class UserController extends BaseController {
         return sendSuccess(result);
     }
 
-    @RequestMapping("/export")
+    @GetMapping("/export")
     public JsonResult export(User user, HttpServletResponse response) {
         List<User> list = userServiceExt.listByEntity(user);
         try {

@@ -60,7 +60,7 @@ public class AdminController extends BaseController {
         return sendSuccess(admin);
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ApiOperation(value="编辑admin", notes="编辑admin")
     public JsonResult update(@LoginedAuth @ApiIgnore UserSession session, Admin admin){
         if(session.getShopId() > 0) admin.setId(session.getId());
@@ -68,7 +68,7 @@ public class AdminController extends BaseController {
         return sendSuccess("编辑成功");
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     @ApiOperation(value="删除admin", notes="删除admin")
     @ApiImplicitParam(name = "id", value = "管理员ID", dataType = "Long", paramType = "header")
     public JsonResult deleteOne(@LoginedAuth @ApiIgnore UserSession session, Long id){
@@ -77,7 +77,7 @@ public class AdminController extends BaseController {
         return sendSuccess("删除成功");
     }
 
-    @GetMapping("/deleteBatch")
+    @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除admin", notes="批量删除admin")
     public JsonResult deleteBatch(@LoginedAuth @ApiIgnore UserSession session, @RequestBody List<Long> ids){
         int result = 0;
