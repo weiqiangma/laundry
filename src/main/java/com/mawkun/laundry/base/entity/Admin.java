@@ -36,7 +36,7 @@ public class Admin {
     @ApiModelProperty(value = "联系方式", name = "phone")
     private String phone;
 
-    @ApiModelProperty(value = "等级", name = "level")
+    @ApiModelProperty(value = "等级", name = "level", example = "-1")
     private Integer level;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

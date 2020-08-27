@@ -71,5 +71,4 @@ public class OrderFormController extends BaseController {
         if (ids!=null&&ids.size()>0) result = orderFormServiceExt.deleteByIds(ids);
         return sendSuccess(result);
     }
-
 }
