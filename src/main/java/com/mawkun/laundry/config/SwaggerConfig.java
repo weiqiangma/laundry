@@ -25,7 +25,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("干洗店后管API文档")
-                .description("有落叶的地方，木叶之火就不会熄灭")
+                .description("只要有树叶飞舞的地方，就有火在燃烧")
                 .termsOfServiceUrl("http://blog.csdn.net/saytime")
                 .version("1.0")
                 .build();

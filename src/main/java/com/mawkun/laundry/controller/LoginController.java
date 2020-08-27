@@ -13,6 +13,7 @@ import com.mawkun.laundry.base.service.UserCacheService;
 import com.mawkun.laundry.service.AdminServiceExt;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.xiaoleilu.hutool.crypto.SecureUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 @Controller
+@Api(value="登录controller",tags={"登录操作接口"})
 public class LoginController extends BaseController {
 
     @Autowired

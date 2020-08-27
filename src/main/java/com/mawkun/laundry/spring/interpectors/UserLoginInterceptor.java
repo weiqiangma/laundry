@@ -4,12 +4,11 @@ import cn.pertech.common.abs.BaseHandlerInterceptor;
 import cn.pertech.common.constants.Constants;
 import cn.pertech.common.spring.SpringContext;
 import cn.pertech.common.utils.StringUtils;
-import com.mawkun.laundry.base.common.Constant.Constant;
+import com.mawkun.laundry.base.common.constant.Constant;
 import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.service.UserCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 

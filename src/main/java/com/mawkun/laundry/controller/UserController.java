@@ -8,6 +8,7 @@ import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.entity.User;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/user")
+@Api(value="用户controller",tags={"用户操作接口"})
 public class UserController extends BaseController {
     
     @Autowired

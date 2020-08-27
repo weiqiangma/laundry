@@ -1,4 +1,4 @@
-package com.mawkun.laundry.base.common.Constant;
+package com.mawkun.laundry.base.common.constant;
 
 //系统常量
 public interface Constant {

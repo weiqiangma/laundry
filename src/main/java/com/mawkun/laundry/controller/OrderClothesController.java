@@ -4,6 +4,7 @@ import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OrderClothes;
 import com.mawkun.laundry.service.OrderClothesServiceExt;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/orderClothes")
+@Api(value="订单商品关联controller",tags={"订单商品关联操作接口"})
 public class OrderClothesController extends BaseController {
     
     @Autowired

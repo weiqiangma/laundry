@@ -6,6 +6,7 @@ import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
 import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.service.ShopServiceExt;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/shop")
+@Api(value="门店controller",tags={"门店操作接口"})
 public class ShopController extends BaseController {
     
     @Autowired

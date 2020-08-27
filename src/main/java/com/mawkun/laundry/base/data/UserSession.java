@@ -1,8 +1,6 @@
 package com.mawkun.laundry.base.data;
 
-import com.mawkun.laundry.base.common.Constant.Constant;
 import com.mawkun.laundry.base.entity.Admin;
-import lombok.Data;
 
 public class UserSession {
 

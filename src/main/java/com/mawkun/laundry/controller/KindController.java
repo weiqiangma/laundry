@@ -3,6 +3,7 @@ package com.mawkun.laundry.controller;
 import cn.pertech.common.abs.BaseController;
 import com.mawkun.laundry.base.entity.Kind;
 import com.mawkun.laundry.service.KindServiceExt;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/kind")
+@Api(value="商品类型controller",tags={"商品类型操作接口"})
 public class KindController extends BaseController {
     
     @Autowired
