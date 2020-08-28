@@ -2,6 +2,8 @@ package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
+import com.github.pagehelper.PageInfo;
+import com.mawkun.laundry.base.data.query.OrderFormQuery;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
 import io.swagger.annotations.Api;
@@ -41,6 +43,13 @@ public class OrderFormController extends BaseController {
     public JsonResult list(OrderForm orderForm) {
         List<OrderForm> orderFormList = orderFormServiceExt.listByEntity(orderForm);
         return sendSuccess(orderFormList);
+    }
+
+    @GetMapping("pageList")
+    @ApiOperation(value="订单列表分页", notes="订单列表分页")
+    public JsonResult pageList(OrderFormQuery query) {
+        PageInfo page = orderFormServiceExt.pageByEntity(query);
+        return sendSuccess(page);
     }
 
     @PostMapping("/insert")

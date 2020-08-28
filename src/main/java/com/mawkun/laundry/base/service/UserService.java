@@ -1,6 +1,9 @@
 package com.mawkun.laundry.base.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.dao.UserDao;
+import com.mawkun.laundry.base.data.query.UserQuery;
 import com.mawkun.laundry.base.entity.User;
 import org.springframework.stereotype.Service;
 

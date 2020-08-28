@@ -1,6 +1,9 @@
 package com.mawkun.laundry.base.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.dao.ShopDao;
+import com.mawkun.laundry.base.data.query.ShopQuery;
 import com.mawkun.laundry.base.entity.Shop;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,7 @@ public class ShopService {
     public List<Shop> listByEntity(Shop shop) {
         return shopDao.listByEntity(shop);
     }
+
 
     public List<Shop> listByIds(List<Long> ids) {
         return shopDao.listByIds(ids);

@@ -4,7 +4,9 @@ import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import cn.pertech.common.utils.RandomUtils;
 import com.alibaba.excel.EasyExcel;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.UserSession;
+import com.mawkun.laundry.base.data.query.UserQuery;
 import com.mawkun.laundry.base.entity.User;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
@@ -48,6 +50,12 @@ public class UserController extends BaseController {
     public JsonResult list(User user) {
         List<User> userList = userServiceExt.listByEntity(user);
         return sendSuccess(userList);
+    }
+
+    @GetMapping("/pageList")
+    public JsonResult pageList(UserQuery userQuery) {
+        PageInfo page = userServiceExt.pageByEntity(userQuery);
+        return sendSuccess(page);
     }
 
     @PostMapping("/insert")

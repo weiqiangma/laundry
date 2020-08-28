@@ -2,8 +2,10 @@ package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
+import com.mawkun.laundry.base.data.query.ShopQuery;
 import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.service.ShopServiceExt;
 import io.swagger.annotations.Api;
@@ -45,6 +47,13 @@ public class ShopController extends BaseController {
     public JsonResult list(Shop shop) {
         List<Shop> shopList = shopServiceExt.listByEntity(shop);
         return sendSuccess(shopList);
+    }
+
+    @GetMapping("/pageList")
+    @ApiOperation(value="门店列表分业", notes="门店列表分业")
+    public JsonResult pageList(ShopQuery shopQuery) {
+        PageInfo<ShopQuery> page = shopServiceExt.pageByEntity(shopQuery);
+        return sendSuccess(page);
     }
 
     @PostMapping("/insert")

@@ -2,7 +2,9 @@ package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.UserSession;
+import com.mawkun.laundry.base.data.query.GoodsQuery;
 import com.mawkun.laundry.base.entity.Goods;
 import com.mawkun.laundry.service.GoodsServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
@@ -19,14 +21,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/adm/goods")
-@Api(value="商品controller",tags={"商品操作接口"})
+@Api(tags={"商品操作接口"})
 public class GoodsController extends BaseController {
     
     @Autowired
     private GoodsServiceExt goodsServiceExt;
 
     @GetMapping("/get")
-    @ApiOperation(value="根据id获取商品", notes="根据id获取商品")
+    @ApiOperation(value="商品详情", notes="商品详情")
     @ApiImplicitParam(name = "id", value = "商品ID", dataType = "Long", paramType = "header")
     public JsonResult getById(Long id) {
         Goods goods = goodsServiceExt.getById(id);
@@ -34,17 +36,24 @@ public class GoodsController extends BaseController {
     }
 
     @GetMapping("/getByEntity")
-    @ApiOperation(value="根据entity获取商品", notes="根据entity获取商品")
+    @ApiOperation(value="商品详情", notes="商品详情")
     public JsonResult getByEntity(Goods goods) {
         Goods resultGoods =  goodsServiceExt.getByEntity(goods);
         return sendSuccess(resultGoods);
     }
 
     @GetMapping("/list")
-    @ApiOperation(value="根据entity获取商品list", notes="根据entity获取商品list")
+    @ApiOperation(value="商品列表", notes="商品列表")
     public JsonResult list(Goods goods) {
         List<Goods> goodsList = goodsServiceExt.listByEntity(goods);
         return sendSuccess(goodsList);
+    }
+
+    @GetMapping("/pageList")
+    @ApiOperation(value="商品列表分页", notes="商品列表分业务")
+    public JsonResult pageList(GoodsQuery query) {
+        PageInfo page = goodsServiceExt.pageByEntity(query);
+        return sendSuccess(page);
     }
 
     @PostMapping("/insert")

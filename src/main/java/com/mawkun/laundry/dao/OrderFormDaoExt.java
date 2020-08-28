@@ -1,5 +1,6 @@
 package com.mawkun.laundry.dao;
 
+import com.mawkun.laundry.base.dao.OrderFormDao;
 import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
-public interface OrderFormDaoExt {
+public interface OrderFormDaoExt extends OrderFormDao {
     /**
      * 统计门店收入
      * @param query

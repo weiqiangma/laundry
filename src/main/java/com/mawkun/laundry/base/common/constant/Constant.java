@@ -48,4 +48,12 @@ public interface Constant {
     int PROJECT_PAY_STATU_NOT       =0;
     int PROJECT_PAY_STATU_NOT_NEED  =1;
     int PROJECT_PAY_STATU_SUCCESS   =2;
+
+    //=============================门店状态=============================
+    int SHOP_LEVEL_FIRST   = 0;   //总店
+    int SHOP_LEVEL_SECOND  = 1;  //分店
+
+    int SHOP_STATUS_NORMAL = 0; //正常
+    int SHOP_STATUS_LOCK   = 1; //锁定
+    int SHOP_STATUS_DELETE = 2; //删除
 }
