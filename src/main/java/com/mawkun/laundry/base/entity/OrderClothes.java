@@ -1,11 +1,11 @@
 package com.mawkun.laundry.base.entity;
 
 import lombok.Data;
-            /**
+                /**
  * (OrderClothes)实体类
  *
  * @author mawkun
- * @date 2020-08-22 15:42:43
+ * @date 2020-08-29 14:55:16
  */
 @Data 
 public class OrderClothes {
@@ -15,5 +15,7 @@ public class OrderClothes {
         private Long orderFormId;
     
         private Long goodsId;
+    
+        private Integer goodsNum;
 
 }

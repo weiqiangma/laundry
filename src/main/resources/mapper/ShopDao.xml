@@ -7,15 +7,17 @@
         <result property="shopName" column="shop_name" jdbcType="VARCHAR"/>
         <result property="address" column="address" jdbcType="VARCHAR"/>
         <result property="picture" column="picture" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="VARCHAR"/>
+        <result property="latitude" column="latitude" jdbcType="VARCHAR"/>
         <result property="location" column="location" jdbcType="VARCHAR"/>
         <result property="level" column="level" jdbcType="INTEGER"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
-        <result property="createTime" column="create_time" jdbcType="OTHER"/>
-        <result property="updateTime" column="update_time" jdbcType="OTHER"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="table_field">
-      id, shop_name, address, picture, location, level, status, create_time, update_time      
+      id, shop_name, address, picture, longitude, latitude, location, level, status, update_time, create_time      
     </sql>
        
     <!--通过Id查询单个-->
@@ -45,6 +47,12 @@
             <if test="picture != null">
                 and picture = #{picture,jdbcType=VARCHAR}
             </if>
+            <if test="longitude != null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
             <if test="location != null">
                 and location = #{location,jdbcType=VARCHAR}
             </if>
@@ -54,11 +62,11 @@
             <if test="status != null">
                 and status = #{status,jdbcType=INTEGER}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
-            </if>
             <if test="updateTime != null">
-                and update_time = #{updateTime,jdbcType=OTHER}
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -81,6 +89,12 @@
             <if test="picture != null">
                 and picture = #{picture,jdbcType=VARCHAR}
             </if>
+            <if test="longitude != null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
             <if test="location != null">
                 and location = #{location,jdbcType=VARCHAR}
             </if>
@@ -90,11 +104,11 @@
             <if test="status != null">
                 and status = #{status,jdbcType=INTEGER}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
-            </if>
             <if test="updateTime != null">
-                and update_time = #{updateTime,jdbcType=OTHER}
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -126,6 +140,12 @@
           <if test="picture != null">
              picture,
           </if>
+          <if test="longitude != null">
+             longitude,
+          </if>
+          <if test="latitude != null">
+             latitude,
+          </if>
           <if test="location != null">
              location,
           </if>
@@ -135,11 +155,11 @@
           <if test="status != null">
              status,
           </if>
-          <if test="createTime != null">
-             create_time,
-          </if>
           <if test="updateTime != null">
              update_time,
+          </if>
+          <if test="createTime != null">
+             create_time,
           </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -155,6 +175,12 @@
           <if test="picture != null">
              #{picture,jdbcType=VARCHAR},
           </if>
+          <if test="longitude != null">
+             #{longitude,jdbcType=VARCHAR},
+          </if>
+          <if test="latitude != null">
+             #{latitude,jdbcType=VARCHAR},
+          </if>
           <if test="location != null">
              #{location,jdbcType=VARCHAR},
           </if>
@@ -164,11 +190,11 @@
           <if test="status != null">
              #{status,jdbcType=INTEGER},
           </if>
-          <if test="createTime != null">
-             #{createTime,jdbcType=OTHER},
-          </if>
           <if test="updateTime != null">
-             #{updateTime,jdbcType=OTHER},
+             #{updateTime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="createTime != null">
+             #{createTime,jdbcType=TIMESTAMP},
           </if>
         </trim>
     </insert>
@@ -176,10 +202,10 @@
     <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into shop
-         (id, shop_name, address, picture, location, level, status, create_time, update_time)
+         (id, shop_name, address, picture, longitude, latitude, location, level, status, update_time, create_time)
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-         (#{item.id,jdbcType=INTEGER}, #{item.shopName,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.picture,jdbcType=VARCHAR}, #{item.location,jdbcType=VARCHAR}, #{item.level,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=OTHER}, #{item.updateTime,jdbcType=OTHER})
+         (#{item.id,jdbcType=INTEGER}, #{item.shopName,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.picture,jdbcType=VARCHAR}, #{item.longitude,jdbcType=VARCHAR}, #{item.latitude,jdbcType=VARCHAR}, #{item.location,jdbcType=VARCHAR}, #{item.level,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 
@@ -196,6 +222,12 @@
             <if test="picture != null and picture != ''">
                 picture = #{picture,jdbcType=VARCHAR},
             </if>
+            <if test="longitude != null and longitude != ''">
+                longitude = #{longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="latitude != null and latitude != ''">
+                latitude = #{latitude,jdbcType=VARCHAR},
+            </if>
             <if test="location != null and location != ''">
                 location = #{location,jdbcType=VARCHAR},
             </if>
@@ -205,11 +237,11 @@
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
             </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=OTHER},
-            </if>
             <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=OTHER},
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -228,6 +260,12 @@
             <if test="where.picture == null and set.picture != null and set.picture != ''">
                 picture = #{set.picture,jdbcType=VARCHAR},
             </if>
+            <if test="where.longitude == null and set.longitude != null and set.longitude != ''">
+                longitude = #{set.longitude,jdbcType=VARCHAR},
+            </if>
+            <if test="where.latitude == null and set.latitude != null and set.latitude != ''">
+                latitude = #{set.latitude,jdbcType=VARCHAR},
+            </if>
             <if test="where.location == null and set.location != null and set.location != ''">
                 location = #{set.location,jdbcType=VARCHAR},
             </if>
@@ -237,11 +275,11 @@
             <if test="where.status == null and set.status != null">
                 status = #{set.status,jdbcType=INTEGER},
             </if>
-            <if test="where.createTime == null and set.createTime != null">
-                create_time = #{set.createTime,jdbcType=OTHER},
-            </if>
             <if test="where.updateTime == null and set.updateTime != null">
-                update_time = #{set.updateTime,jdbcType=OTHER},
+                update_time = #{set.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="where.createTime == null and set.createTime != null">
+                create_time = #{set.createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
         <where>
@@ -257,6 +295,12 @@
             <if test="where.picture != null">
                 and picture = #{where.picture,jdbcType=VARCHAR}
             </if>
+            <if test="where.longitude != null">
+                and longitude = #{where.longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="where.latitude != null">
+                and latitude = #{where.latitude,jdbcType=VARCHAR}
+            </if>
             <if test="where.location != null">
                 and location = #{where.location,jdbcType=VARCHAR}
             </if>
@@ -266,11 +310,11 @@
             <if test="where.status != null">
                 and status = #{where.status,jdbcType=INTEGER}
             </if>
-            <if test="where.createTime != null">
-                and create_time = #{where.createTime,jdbcType=OTHER}
-            </if>
             <if test="where.updateTime != null">
-                and update_time = #{where.updateTime,jdbcType=OTHER}
+                and update_time = #{where.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="where.createTime != null">
+                and create_time = #{where.createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </update>
@@ -294,6 +338,16 @@
                   when id = #{item.id} then #{item.picture}
                  </foreach>
             </trim>
+            <trim prefix="longitude = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.longitude}
+                 </foreach>
+            </trim>
+            <trim prefix="latitude = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.latitude}
+                 </foreach>
+            </trim>
             <trim prefix="location = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
                   when id = #{item.id} then #{item.location}
@@ -309,14 +363,14 @@
                   when id = #{item.id} then #{item.status}
                  </foreach>
             </trim>
-            <trim prefix="create_time = case" suffix="end,">
-                 <foreach collection="list" item="item" index="index">
-                  when id = #{item.id} then #{item.createTime}
-                 </foreach>
-            </trim>
             <trim prefix="update_time = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
                   when id = #{item.id} then #{item.updateTime}
+                 </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.createTime}
                  </foreach>
             </trim>
         </trim>
@@ -344,6 +398,12 @@
             <if test="picture != null">
                 and picture = #{picture,jdbcType=VARCHAR}
             </if>
+            <if test="longitude != null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
             <if test="location != null">
                 and location = #{location,jdbcType=VARCHAR}
             </if>
@@ -353,11 +413,11 @@
             <if test="status != null">
                 and status = #{status,jdbcType=INTEGER}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
-            </if>
             <if test="updateTime != null">
-                and update_time = #{updateTime,jdbcType=OTHER}
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </delete>
@@ -389,6 +449,12 @@
             <if test="picture != null">
                 and picture = #{picture,jdbcType=VARCHAR}
             </if>
+            <if test="longitude != null">
+                and longitude = #{longitude,jdbcType=VARCHAR}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude,jdbcType=VARCHAR}
+            </if>
             <if test="location != null">
                 and location = #{location,jdbcType=VARCHAR}
             </if>
@@ -398,11 +464,11 @@
             <if test="status != null">
                 and status = #{status,jdbcType=INTEGER}
             </if>
-            <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=OTHER}
-            </if>
             <if test="updateTime != null">
-                and update_time = #{updateTime,jdbcType=OTHER}
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>

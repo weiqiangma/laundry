@@ -59,12 +59,10 @@ public class MyMvcConfig extends WebMvcConfigurationSupport {
     //添加swagger-ui.html资源不然访问不到
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations(
-                "classpath:/static/");
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations(
-                "classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations(
-                "classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/images/**").addResourceLocations("file:/D:/Images/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
         super.addResourceHandlers(registry);
     }
 }

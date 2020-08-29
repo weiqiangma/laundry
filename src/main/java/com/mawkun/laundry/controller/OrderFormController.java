@@ -4,6 +4,7 @@ import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.query.OrderFormQuery;
+import com.mawkun.laundry.base.data.vo.OrderFormVo;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
 import io.swagger.annotations.Api;
@@ -26,9 +27,9 @@ public class OrderFormController extends BaseController {
 
     @GetMapping("/get")
     @ApiOperation(value="根据id获取订单", notes="根据id获取订单")
-    public OrderForm getById(Long id) {
-        OrderForm orderForm = orderFormServiceExt.getById(id);
-        return orderForm!=null?orderForm:new OrderForm();
+    public JsonResult getById(Long id) {
+        OrderFormVo orderFormVo = orderFormServiceExt.getDetail(id);
+        return sendSuccess(orderFormVo);
     }
 
     @GetMapping("/getByEntity")

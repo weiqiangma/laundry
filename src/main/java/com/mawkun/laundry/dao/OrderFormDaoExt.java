@@ -3,6 +3,7 @@ package com.mawkun.laundry.dao;
 import com.mawkun.laundry.base.dao.OrderFormDao;
 import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
+import com.mawkun.laundry.base.data.vo.OrderFormVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,12 @@ public interface OrderFormDaoExt extends OrderFormDao {
      * @return
      */
     List<ShopIncomeData> statsShopIncome(ShopIncomeQuery query);
+
+    /**
+     * 门店详情
+     * @param id
+     * @return
+     */
+    OrderFormVo selectDetail(Long id);
     
 }

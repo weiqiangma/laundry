@@ -30,9 +30,9 @@ public class ShopController extends BaseController {
 
     @GetMapping("/get")
     @ApiOperation(value="门店详情", notes="门店详情")
-    public Shop getById(Long id) {
+    public JsonResult getById(Long id) {
         Shop shop = shopServiceExt.getById(id);
-        return shop!=null?shop:new Shop();
+        return sendSuccess(shop);
     }
 
     @GetMapping("/getByEntity")
@@ -58,15 +58,15 @@ public class ShopController extends BaseController {
 
     @PostMapping("/insert")
     @ApiOperation(value="添加门店", notes="添加门店")
-    public JsonResult insert(Shop shop, MultipartFile[] file){
-        int result = shopServiceExt.insertWithPic(shop, file);
+    public JsonResult insert(Shop shop, MultipartFile[] files){
+        int result = shopServiceExt.insertWithPic(shop, files);
         return sendSuccess(result);
     }
 
     @PutMapping("/update")
     @ApiOperation(value="编辑门店", notes="编辑门店")
-    public JsonResult update(Shop shop){
-        int result = shopServiceExt.update(shop);
+    public JsonResult update(Shop shop, MultipartFile[] files){
+        int result = shopServiceExt.updateWithPic(shop, files);
         return sendSuccess(result);
     }
 

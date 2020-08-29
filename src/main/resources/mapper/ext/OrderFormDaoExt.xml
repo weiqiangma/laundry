@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mawkun.laundry.dao.OrderFormDaoExt">
 
+    <!-- 统计门店收入 -->
     <select id="statsShopIncome" resultType="com.mawkun.laundry.base.data.ShopIncomeData" parameterType="com.mawkun.laundry.base.data.query.ShopIncomeQuery">
     SELECT
         shop.id,
@@ -20,5 +21,38 @@
     </where>
     GROUP BY
         shop.id
+    </select>
+
+    <resultMap id="OrderFormDetailResultMap" type="com.mawkun.laundry.base.data.vo.OrderFormVo">
+        <id column="id" property="id"/>
+        <result column="order_serial" property="orderSerial"/>
+        <result column="remark" property="remark"/>
+        <result column="status" property="status"/>
+        <result column="real_amount" property="realAmount"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="transport_way" property="transportWay"/>
+        <result column="customerName" property="customerName"/>
+        <result column="distributorName" property="distributorName"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 订单详情 -->
+    <select id="selectDetail" parameterType="java.lang.Long" resultMap="OrderFormDetailResultMap">
+    SELECT
+        ofm.id,
+        ofm.order_serial,
+        ofm.remark,
+        ofm.`status`,
+        ofm.real_amount,
+        ofm.total_amount,
+        ofm.transport_way,
+        ofm.create_time,
+        cus.real_name customerName,
+        dis.real_name distributorName
+    FROM
+        order_form ofm
+        left JOIN `user` cus on ofm.user_id =cus.id
+        LEFT JOIN `user` dis on ofm.distributor_id=dis.id
+    WHERE ofm.id=#{id}
     </select>
 </mapper>

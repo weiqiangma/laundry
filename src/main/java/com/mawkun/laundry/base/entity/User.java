@@ -32,12 +32,12 @@ public class User {
         @ExcelProperty("积分")
         private Integer integral;
         @ExcelProperty("更新时间")
-        @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
         private Date updateTime;
         @ExcelProperty("创建时间")
-        @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
         private Date createTime;
 
 }

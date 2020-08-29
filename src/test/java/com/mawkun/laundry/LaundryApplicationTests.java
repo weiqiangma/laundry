@@ -2,6 +2,7 @@ package com.mawkun.laundry;
 
 import cn.pertech.common.cache.CacheService;
 import com.mawkun.laundry.base.entity.User;
+import com.mawkun.laundry.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +14,6 @@ class LaundryApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
-    @Autowired
-    private CacheService cacheService;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @Test
     void contextLoads() {
@@ -30,8 +27,10 @@ class LaundryApplicationTests {
 
     @Test
     void getUser() {
-        User user = cacheService.get("user1",User.class);
-        System.out.println(user);
+        String img = "c1d3a7de1cef4812bb8ba41c27e1fae11598696669854.jpeg,d4485bac3a124aaa84a6a73d30908d181598696669855.jpeg,0fbed345878f46baa8b3ac2a029201131598696669866.jpeg";
+        String delImages = "c1d3a7de1cef4812bb8ba41c27e1fae11598696669854.jpeg,d4485bac3a124aaa84a6a73d30908d181598696669855.jpeg";
+        String newImg = StringUtils.remove(img, delImages);
+        System.out.println(newImg);
     }
 
 }

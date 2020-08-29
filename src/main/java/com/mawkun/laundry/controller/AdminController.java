@@ -2,7 +2,9 @@ package com.mawkun.laundry.controller;
 
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
+import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.UserSession;
+import com.mawkun.laundry.base.data.query.AdminQuery;
 import com.mawkun.laundry.base.entity.Admin;
 import com.mawkun.laundry.service.AdminServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
@@ -30,7 +32,6 @@ public class AdminController extends BaseController {
 
     @GetMapping("/get")
     @ApiOperation(value="根据id获取admin", notes="根据id获取admin")
-    @ApiImplicitParam(name = "id", value = "管理员ID", dataType = "Long", paramType = "header")
     public JsonResult getById(Long id) {
         Admin admin = adminServiceExt.getById(id);
         return sendSuccess(admin);
@@ -50,6 +51,13 @@ public class AdminController extends BaseController {
         if(session.getShopId() > 0) admin.setId(session.getId());
         List<Admin> adminList = adminServiceExt.listByEntity(admin);
         return sendSuccess(adminList);
+    }
+
+    @GetMapping("/pageList")
+    @ApiOperation(value="管理员列表分页", notes="管理员列表分页")
+    public JsonResult pageList(AdminQuery query) {
+        PageInfo page = adminServiceExt.pageByEntity(query);
+        return sendSuccess(page);
     }
 
     @PostMapping("/insert")

@@ -13,6 +13,7 @@ import com.mawkun.laundry.base.service.ShopService;
 import com.mawkun.laundry.dao.OrderFormDaoExt;
 import com.mawkun.laundry.dao.ShopDaoExt;
 import com.mawkun.laundry.utils.ImageUtils;
+import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,15 +35,31 @@ public class ShopServiceExt extends ShopService {
     /**
      * 添加店铺
      * @param shop
-     * @param file
+     * @param files
      * @return
      */
-    public int insertWithPic(Shop shop, MultipartFile[] file) {
-        String image = ImageUtils.uploadImages(file);
+    public int insertWithPic(Shop shop, MultipartFile[] files) {
+        String image = ImageUtils.uploadImages(files);
         shop.setPicture(image);
         shop.setCreateTime(new Date());
         shop.setUpdateTime(new Date());
         return shopDaoExt.insert(shop);
+    }
+
+    /**
+     * 编辑代纳普
+     * @param shop
+     * @param files
+     * @return
+     */
+    public int updateWithPic(Shop shop, MultipartFile[] files) {
+        String newImage = ImageUtils.uploadImages(files);
+        if(shop.getPicture() != null) {
+            StringBuilder strBuilder = new StringBuilder();
+            String images = strBuilder.append(shop.getPicture()).append(",").append(newImage).toString();
+            shop.setPicture(images);
+        }
+        return shopDaoExt.update(shop);
     }
 
     /**
