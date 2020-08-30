@@ -28,7 +28,7 @@ public class KindServiceExt extends KindService {
         query.init();
         PageHelper.startPage(query.getPageNo(), query.getPageSize());
         List<Kind> list = kindDaoExt.listByEntity(query);
-        return new PageInfo(list);
+        return new<Kind> PageInfo(list);
     }
 
 

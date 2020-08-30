@@ -17,6 +17,7 @@ import com.mawkun.laundry.base.service.ShopService;
 import com.mawkun.laundry.dao.OrderFormDaoExt;
 import com.mawkun.laundry.dao.ShopDaoExt;
 import com.mawkun.laundry.utils.ImageUtils;
+import com.mawkun.laundry.utils.TimeUtils;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -88,6 +89,7 @@ public class ShopServiceExt extends ShopService {
      * @return
      */
     public List<ShopIncomeData> statsShopIncome(StateQuery query) {
+        fillQueryData(query);
         List<OrderForm> list = orderFormDaoExt.selectList(query);
         Map<Long, OrderForm> map = list.stream().collect(Collectors.toMap(OrderForm::getShopId, Function.identity()));
         Date sTime = query.getStartTime();
@@ -105,6 +107,7 @@ public class ShopServiceExt extends ShopService {
             }else{
                 continue;
             }
+            ca.add(Calendar.DAY_OF_MONTH,1);
         }
         return orderFormDaoExt.statsShopIncome(query);
     }
@@ -121,7 +124,46 @@ public class ShopServiceExt extends ShopService {
         return new PageInfo<Shop>(list);
     }
 
+    /**
+     * 根据门店名查询
+     * @param name
+     * @return
+     */
     public List<Shop> getByName(String name) {
         return shopDaoExt.selectByName(name);
+    }
+
+    private void fillQueryData(StateQuery queryVO) {
+        Date now = new Date();
+        if(queryVO.getType() == 1) {
+            //当天统计
+            queryVO.setStartTime(DateUtils.dateStartDate(now));
+            queryVO.setEndTime(DateUtils.dateEndDate(now));
+            queryVO.setFormatCode("%H");
+            queryVO.setDateCount(24);
+        }else if(queryVO.getType() == 2) {
+            //本周统计
+            queryVO.setStartTime(TimeUtils.getWeekStart());
+            queryVO.setEndTime(TimeUtils.getWeekEnd());
+            queryVO.setFormatCode("%Y-%m-%d");
+            queryVO.setDateCount(7);
+        }else if(queryVO.getType() == 3) {
+            //本月统计
+            queryVO.setStartTime(TimeUtils.getMonthStart());
+            queryVO.setEndTime(TimeUtils.getMonthEnd());
+            queryVO.setFormatCode("%Y-%m-%d");
+            int year = DateUtils.getYear();
+            int month = DateUtils.getMonth();
+            queryVO.setDateCount(DateUtils.getDaysOfMonth(year,month));
+        }else if(queryVO.getType()==4){
+            //自定义传入
+            queryVO.setFormatCode("%Y-%m-%d");
+            queryVO.setStartTime(DateUtils.dateStartDate(queryVO.getStartTime()));
+            //最后一天要取到时间
+            queryVO.setEndTime(DateUtils.dateEndDate(queryVO.getEndTime()));
+            int diff = (int)DateUtils.dayDiff(queryVO.getStartTime(), queryVO.getEndTime());
+            queryVO.setDateCount(diff);
+        }
+        //System.out.println("格式化后范围: "+JsonUtils.toString(queryVO));
     }
 }
