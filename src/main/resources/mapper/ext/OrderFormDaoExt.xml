@@ -3,7 +3,7 @@
 <mapper namespace="com.mawkun.laundry.dao.OrderFormDaoExt">
 
     <!-- 统计门店收入 -->
-    <select id="statsShopIncome" resultType="com.mawkun.laundry.base.data.ShopIncomeData" parameterType="com.mawkun.laundry.base.data.query.ShopIncomeQuery">
+    <select id="statsShopIncome" resultType="com.mawkun.laundry.base.data.ShopIncomeData" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
     SELECT
         shop.id,
         shop_name shopName,
@@ -54,5 +54,17 @@
         left JOIN `user` cus on ofm.user_id =cus.id
         LEFT JOIN `user` dis on ofm.distributor_id=dis.id
     WHERE ofm.id=#{id}
+    </select>
+
+    <select id="selectList" resultMap="com.mawkun.laundry.base.dao.OrderFormDao.OrderFormResultMap" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
+        select * from order_form
+        <where>
+            <if test="shopId != null">
+            and shop_id = #{shopId}
+            </if>
+            <if test="startTime != null and endTime != null">
+            and create_time &gt;= #{startTime} and create_time &lt;= #{endTime}
+            </if>
+        </where>
     </select>
 </mapper>

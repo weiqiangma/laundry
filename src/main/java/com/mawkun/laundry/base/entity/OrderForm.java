@@ -29,13 +29,13 @@ public class OrderForm {
 
     private String remark;
 
-    private Object status;
+    private Integer status;
 
     private Double realAmount;
 
     private Double totalAmount;
 
-    private Object transportWay;
+    private Integer transportWay;
 
     private Integer integral;
 

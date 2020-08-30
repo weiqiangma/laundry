@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 /**
@@ -54,15 +56,18 @@ public class KindController extends BaseController {
 
     @PostMapping("/insert")
     @ApiOperation(value="添加商品类型", notes="添加商品类型")
-    public JsonResult insert(Kind kind){
-        kindServiceExt.insert(kind);
+    public JsonResult insert(Kind kind, MultipartFile file){
+        if(file == null || kind.getKindName() == null) return sendError("缺少参数");
+        Kind resultKind = kindServiceExt.getByName(kind.getKindName());
+        if(resultKind != null) return sendError("该类型已存在不能重复添加");
+        kindServiceExt.insertWithPic(kind, file);
         return sendSuccess(kind);
     }
 
     @PutMapping("/update")
     @ApiOperation(value="编辑商品类型", notes="编辑商品类型")
-    public JsonResult update(Kind kind){
-        int result = kindServiceExt.update(kind);
+    public JsonResult update(Kind kind, MultipartFile file){
+        int result = kindServiceExt.updateWithPic(kind, file);
         return sendSuccess(result);
     }
 

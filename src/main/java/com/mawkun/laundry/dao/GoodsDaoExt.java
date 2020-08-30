@@ -22,4 +22,6 @@ public interface GoodsDaoExt extends GoodsDao {
      */
     List<GoodsVo> selectByOrderFormId(Long orderId);
 
+    List<Goods> selectByName(String name);
+
 }

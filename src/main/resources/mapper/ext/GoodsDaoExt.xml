@@ -23,4 +23,8 @@
     WHERE
         oc.order_form_id = 1
     </select>
+
+    <select id="selectByName" resultMap="com.mawkun.laundry.base.dao.GoodsDao.GoodsResultMap" parameterType="java.lang.String">
+        select * from goods where goods_name = #{name}
+    </select>
 </mapper>
