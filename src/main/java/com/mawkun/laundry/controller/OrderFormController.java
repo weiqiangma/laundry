@@ -3,10 +3,12 @@ package com.mawkun.laundry.controller;
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.github.pagehelper.PageInfo;
+import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.data.query.OrderFormQuery;
 import com.mawkun.laundry.base.data.vo.OrderFormVo;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
+import com.mawkun.laundry.spring.annotation.LoginedAuth;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -62,9 +64,8 @@ public class OrderFormController extends BaseController {
 
     @PutMapping("/update")
     @ApiOperation(value="编辑订单", notes="编辑订单")
-    public JsonResult update(OrderForm orderForm){
-        int result = orderFormServiceExt.update(orderForm);
-        return sendSuccess(result);
+    public JsonResult update(@LoginedAuth UserSession session, OrderForm orderForm){
+        return orderFormServiceExt.update(session, orderForm);
     }
 
     @DeleteMapping("/delete")

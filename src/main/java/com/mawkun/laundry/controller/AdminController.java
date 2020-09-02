@@ -71,7 +71,7 @@ public class AdminController extends BaseController {
     @PutMapping("/update")
     @ApiOperation(value="编辑admin", notes="编辑admin")
     public JsonResult update(@LoginedAuth @ApiIgnore UserSession session, Admin admin){
-        if(session.getShopId() > 0) admin.setId(session.getId());
+        if(!session.isSuperAdmin()) return sendError("非主管理员无权编辑");
         adminServiceExt.update(admin);
         return sendSuccess("编辑成功");
     }

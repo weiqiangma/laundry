@@ -1,5 +1,7 @@
 package com.mawkun.laundry.controller;
 
+import cn.pertech.common.abs.BaseController;
+import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OperateOrderLog;
 import com.mawkun.laundry.base.service.OperateOrderLogService;
 import io.swagger.annotations.Api;
@@ -14,53 +16,56 @@ import java.util.List;
  */
 @RestController
 @Api(tags={"订单操作日志接口"})
-@RequestMapping("/operateOrderLog")
-public class OperateOrderLogController {
+@RequestMapping("/adm/operateOrderLog")
+public class OperateOrderLogController extends BaseController {
     
     @Autowired
     private OperateOrderLogService operateOrderLogService;
 
     @GetMapping("/get")
     @ApiOperation(value="订单日志详情", notes="订单日志详情")
-    public OperateOrderLog getById(Long id) {
+    public JsonResult getById(Long id) {
         OperateOrderLog operateOrderLog = operateOrderLogService.getById(id);
-        return operateOrderLog!=null?operateOrderLog:new OperateOrderLog();
+        return sendSuccess(operateOrderLog);
     }
 
     @GetMapping("/getByEntity")
     @ApiOperation(value="订单日志详情", notes="订单日志详情")
-    public OperateOrderLog getByEntity(OperateOrderLog operateOrderLog) {
-        return operateOrderLogService.getByEntity(operateOrderLog);
+    public JsonResult getByEntity(OperateOrderLog operateOrderLog) {
+        OperateOrderLog resultLog = operateOrderLogService.getByEntity(operateOrderLog);
+        return sendSuccess(resultLog);
     }
 
     @GetMapping("/list")
     @ApiOperation(value="订单日志列表", notes="订单日志列表")
-    public List<OperateOrderLog> list(OperateOrderLog operateOrderLog) {
+    public JsonResult list(OperateOrderLog operateOrderLog) {
         List<OperateOrderLog> operateOrderLogList = operateOrderLogService.listByEntity(operateOrderLog);
-        return operateOrderLogList;
+        return sendSuccess(operateOrderLogList);
     }
 
     @PostMapping("/insert")
-    public OperateOrderLog insert(@RequestBody OperateOrderLog operateOrderLog){
+    public JsonResult insert(@RequestBody OperateOrderLog operateOrderLog){
         operateOrderLogService.insert(operateOrderLog);
-        return operateOrderLog;
+        return sendSuccess(operateOrderLog);
     }
 
     @PutMapping("/update")
-    public int update(@RequestBody OperateOrderLog operateOrderLog){
-        return operateOrderLogService.update(operateOrderLog);
+    public JsonResult update(@RequestBody OperateOrderLog operateOrderLog){
+        int result = operateOrderLogService.update(operateOrderLog);
+        return sendSuccess(result);
     }
 
     @DeleteMapping("/delete")
-    public int deleteOne(Long id){
-        return operateOrderLogService.deleteById(id);
+    public JsonResult deleteOne(Long id){
+        int result = operateOrderLogService.deleteById(id);
+        return sendSuccess(result);
     }
 
     @DeleteMapping("/deleteBatch")
-    public int deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
         if (ids!=null&&ids.size()>0) result = operateOrderLogService.deleteByIds(ids);
-        return result;
+        return sendSuccess(result);
     }
 
 }

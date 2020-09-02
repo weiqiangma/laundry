@@ -2,6 +2,7 @@ package com.mawkun.laundry.base.entity;
 
 import java.util.Date;
 
+import com.mawkun.laundry.base.data.UserSession;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,5 +31,4 @@ public class OperateOrderLog {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
-
 }

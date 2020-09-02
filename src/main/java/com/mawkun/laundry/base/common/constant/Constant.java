@@ -5,6 +5,10 @@ public interface Constant {
     int STATUS_NO  = 0;
     int STATUS_YES = 1;
 
+    //=============================管理员类型=============================//
+    int ADMIN_TYPE_SUPER = 1;   //主管理员
+    int ADMIN_TYPE_COMMON = 2;  //普通管理员
+
     //=============================用户类型=============================//
     int USER_TYPE_CUSTOMER = 1;     //顾客
     int USER_TYPE_DISTRIBUTOR = 2;  //配送员

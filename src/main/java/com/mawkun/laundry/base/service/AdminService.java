@@ -1,5 +1,6 @@
 package com.mawkun.laundry.base.service;
 
+import cn.pertech.common.utils.CryptUtils;
 import com.mawkun.laundry.base.dao.AdminDao;
 import com.mawkun.laundry.base.entity.Admin;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class AdminService {
         Date date = new Date();
         admin.setCreateTime(date);
         admin.setUpdateTime(date);
+        admin.setPassword(CryptUtils.md5Safe(admin.getPassword()));
         return adminDao.insert(admin);
     }
 
@@ -51,6 +53,7 @@ public class AdminService {
 
     public int update(Admin admin) {
         admin.setUpdateTime(new Date());
+        if(admin.getPassword() != null) admin.setPassword(CryptUtils.md5Safe(admin.getPassword()));
         return adminDao.update(admin);
     }
 
