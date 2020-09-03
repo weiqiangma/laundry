@@ -2,6 +2,7 @@ package com.mawkun.laundry.base.service;
 
 import cn.pertech.common.spring.JsonResult;
 import cn.pertech.common.utils.NumberUtils;
+import cn.pertech.common.utils.StringUtils;
 import com.mawkun.laundry.base.common.constant.Constant;
 import com.mawkun.laundry.base.dao.OperateOrderLogDao;
 import com.mawkun.laundry.base.dao.OrderFormDao;
@@ -41,6 +42,9 @@ public class OrderFormService {
     }
 
     public List<OrderForm> listByEntity(OrderForm orderForm) {
+        if(StringUtils.isEmpty(orderForm.getOrderSerial())) {
+            orderForm.setOrderSerial("%" + orderForm.getOrderSerial() + "%");
+        }
         return orderFormDao.listByEntity(orderForm);
     }
 
@@ -82,6 +86,8 @@ public class OrderFormService {
                 operate = "待取货";
             } else if(status == 6) {
                 operate = "已完成";
+            } else {
+                return new JsonResult().success("该订单已完成");
             }
             log.setUserId(session.getId());
             log.setOrderFormId(orderForm.getId());
@@ -89,6 +95,7 @@ public class OrderFormService {
             if(session.isDistributor()) log.setUserKind(Constant.USER_TYPE_DISTRIBUTOR);
             if(session.isCustomer()) log.setUserKind(Constant.USER_TYPE_CUSTOMER);
             log.setOperate(operate);
+            log.setStatus(status);
             log.setDescription("确定操作无误");
             log.setCreateTime(new Date());
             operateOrderLogDao.insert(log);

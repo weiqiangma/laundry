@@ -10,9 +10,12 @@ import com.mawkun.laundry.base.data.query.ShopQuery;
 import com.mawkun.laundry.base.data.query.StateQuery;
 import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.service.ShopServiceExt;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.security.util.ArrayUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -92,9 +97,17 @@ public class ShopController extends BaseController {
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除门店", notes="批量删除门店")
-    public JsonResult deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(String ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = shopServiceExt.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = shopServiceExt.deleteByIds(idList);
         return sendSuccess(result);
     }
 

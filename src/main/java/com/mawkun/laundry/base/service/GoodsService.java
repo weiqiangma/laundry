@@ -2,6 +2,7 @@ package com.mawkun.laundry.base.service;
 
 import com.mawkun.laundry.base.dao.GoodsDao;
 import com.mawkun.laundry.base.entity.Goods;
+import com.mawkun.laundry.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +32,9 @@ public class GoodsService {
     }
 
     public List<Goods> listByEntity(Goods goods) {
+        if(!StringUtils.isEmpty(goods.getGoodsName())) {
+            goods.setGoodsName("%" + goods.getGoodsName() + "%");
+        }
         return goodsDao.listByEntity(goods);
     }
 

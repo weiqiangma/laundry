@@ -2,7 +2,6 @@ package com.mawkun.laundry.base.entity;
 
 import java.util.Date;
 
-import com.mawkun.laundry.base.data.UserSession;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * (OperateOrderLog)实体类
  *
  * @author mawkun
- * @date 2020-08-28 21:15:45
+ * @date 2020-09-02 21:13:38
  */
 @Data
 public class OperateOrderLog {
@@ -28,7 +27,10 @@ public class OperateOrderLog {
 
     private String description;
 
+    private Object status;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
 }

@@ -8,14 +8,19 @@ import com.mawkun.laundry.base.data.query.AdminQuery;
 import com.mawkun.laundry.base.entity.Admin;
 import com.mawkun.laundry.service.AdminServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -87,10 +92,18 @@ public class AdminController extends BaseController {
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除admin", notes="批量删除admin")
-    public JsonResult deleteBatch(@LoginedAuth @ApiIgnore UserSession session, @RequestBody List<Long> ids){
+    public JsonResult deleteBatch(@LoginedAuth @ApiIgnore UserSession session,  String ids){
         int result = 0;
         if(session.getShopId() > 0) return sendSuccess("子管理员无删除其他管理员权限");
-        if (ids!=null&&ids.size()>0) result = adminServiceExt.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = adminServiceExt.deleteByIds(idList);
         return sendSuccess(result);
     }
 }

@@ -7,6 +7,7 @@ import com.mawkun.laundry.base.entity.Goods;
 import com.mawkun.laundry.base.service.GoodsService;
 import com.mawkun.laundry.dao.GoodsDaoExt;
 import com.mawkun.laundry.utils.ImageUtils;
+import com.mawkun.laundry.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,9 @@ public class GoodsServiceExt extends GoodsService {
 
     public PageInfo pageByEntity(GoodsQuery query) {
         query.init();
+        if(!StringUtils.isEmpty(query.getGoodsName())) {
+            query.setGoodsName("%" + query.getGoodsName() + "%");
+        }
         PageHelper.startPage(query.getPageNo(), query.getPageSize());
         List<Goods> list = goodsDaoExt.listByEntity(query);
         return new PageInfo(list);

@@ -9,11 +9,12 @@
         <result property="userKind" column="user_kind" jdbcType="OTHER"/>
         <result property="operate" column="operate" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="OTHER"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="table_field">
-      id, user_id, order_form_id, user_kind, operate, description, create_time      
+      id, user_id, order_form_id, user_kind, operate, description, status, create_time      
     </sql>
        
     <!--通过Id查询单个-->
@@ -21,7 +22,7 @@
         select
           <include refid="table_field" />
         from operate_order_log
-        where id  = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
 
@@ -49,10 +50,14 @@
             <if test="description != null">
                 and description = #{description,jdbcType=VARCHAR}
             </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
+            </if>
             <if test="createTime != null">
                 and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
         </where>
+        order by create_time desc
     </select>
 
     <!--通过实体不为空的属性作为筛选条件查询单个-->
@@ -79,6 +84,9 @@
             <if test="description != null">
                 and description = #{description,jdbcType=VARCHAR}
             </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
+            </if>
             <if test="createTime != null">
                 and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
@@ -90,14 +98,14 @@
         select
           <include refid="table_field" />
         from operate_order_log
-        where  in
+        where id in
         <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
             #{item}
         </foreach>
     </select>
 
     <!--新增实体属性不为null的列-->
-    <insert id="insert" keyProperty="" useGeneratedKeys="true" parameterType="com.mawkun.laundry.base.entity.OperateOrderLog">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.mawkun.laundry.base.entity.OperateOrderLog">
         insert into operate_order_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
           <if test="id != null">
@@ -117,6 +125,9 @@
           </if>
           <if test="description != null">
              description,
+          </if>
+          <if test="status != null">
+             status,
           </if>
           <if test="createTime != null">
              create_time,
@@ -141,6 +152,9 @@
           <if test="description != null">
              #{description,jdbcType=VARCHAR},
           </if>
+          <if test="status != null">
+             #{status,jdbcType=OTHER},
+          </if>
           <if test="createTime != null">
              #{createTime,jdbcType=TIMESTAMP},
           </if>
@@ -148,12 +162,12 @@
     </insert>
 
     <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
-    <insert id="insertBatch" keyProperty="" useGeneratedKeys="true" parameterType="list">
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into operate_order_log
-         (id, user_id, order_form_id, user_kind, operate, description, create_time)
+         (id, user_id, order_form_id, user_kind, operate, description, status, create_time)
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-         (#{item.id,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER}, #{item.orderFormId,jdbcType=INTEGER}, #{item.userKind,jdbcType=OTHER}, #{item.operate,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP})
+         (#{item.id,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER}, #{item.orderFormId,jdbcType=INTEGER}, #{item.userKind,jdbcType=OTHER}, #{item.operate,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR}, #{item.status,jdbcType=OTHER}, #{item.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 
@@ -161,9 +175,6 @@
     <update id="update" parameterType="com.mawkun.laundry.base.entity.OperateOrderLog">
         update operate_order_log
         <set>
-            <if test="id != null">
-                id = #{id,jdbcType=INTEGER},
-            </if>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
@@ -179,20 +190,20 @@
             <if test="description != null and description != ''">
                 description = #{description,jdbcType=VARCHAR},
             </if>
+            <if test="status != null">
+                status = #{status,jdbcType=OTHER},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where  = #{,jdbcType=}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <!--通过表字段修改实体属性不为null的列-->
     <update id="updateByField">
         update operate_order_log
         <set>
-            <if test="where.id == null and set.id != null">
-                id = #{set.id,jdbcType=INTEGER},
-            </if>
             <if test="where.userId == null and set.userId != null">
                 user_id = #{set.userId,jdbcType=INTEGER},
             </if>
@@ -207,6 +218,9 @@
             </if>
             <if test="where.description == null and set.description != null and set.description != ''">
                 description = #{set.description,jdbcType=VARCHAR},
+            </if>
+            <if test="where.status == null and set.status != null">
+                status = #{set.status,jdbcType=OTHER},
             </if>
             <if test="where.createTime == null and set.createTime != null">
                 create_time = #{set.createTime,jdbcType=TIMESTAMP},
@@ -231,6 +245,9 @@
             <if test="where.description != null">
                 and description = #{where.description,jdbcType=VARCHAR}
             </if>
+            <if test="where.status != null">
+                and status = #{where.status,jdbcType=OTHER}
+            </if>
             <if test="where.createTime != null">
                 and create_time = #{where.createTime,jdbcType=TIMESTAMP}
             </if>
@@ -241,45 +258,45 @@
     <update id="updateBatch" parameterType="list">
         update operate_order_log
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="id = case" suffix="end,">
-                 <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.id}
-                 </foreach>
-            </trim>
             <trim prefix="user_id = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.userId}
+                  when id = #{item.id} then #{item.userId}
                  </foreach>
             </trim>
             <trim prefix="order_form_id = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.orderFormId}
+                  when id = #{item.id} then #{item.orderFormId}
                  </foreach>
             </trim>
             <trim prefix="user_kind = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.userKind}
+                  when id = #{item.id} then #{item.userKind}
                  </foreach>
             </trim>
             <trim prefix="operate = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.operate}
+                  when id = #{item.id} then #{item.operate}
                  </foreach>
             </trim>
             <trim prefix="description = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.description}
+                  when id = #{item.id} then #{item.description}
+                 </foreach>
+            </trim>
+            <trim prefix="status = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.status}
                  </foreach>
             </trim>
             <trim prefix="create_time = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
-                  when  = #{item.} then #{item.createTime}
+                  when id = #{item.id} then #{item.createTime}
                  </foreach>
             </trim>
         </trim>
-        where  in
+        where id in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-            #{item.,jdbcType=}
+            #{item.id,jdbcType=INTEGER}
         </foreach>
     </update>
     
@@ -292,9 +309,6 @@
     <delete id="deleteByEntity" parameterType="com.mawkun.laundry.base.entity.OperateOrderLog">
         delete from operate_order_log
         <where>
-            <if test="id != null">
-                and id = #{id,jdbcType=INTEGER}
-            </if>
             <if test="userId != null">
                 and user_id = #{userId,jdbcType=INTEGER}
             </if>
@@ -310,6 +324,9 @@
             <if test="description != null">
                 and description = #{description,jdbcType=VARCHAR}
             </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
+            </if>
             <if test="createTime != null">
                 and create_time = #{createTime,jdbcType=TIMESTAMP}
             </if>
@@ -318,18 +335,18 @@
     
     <!--通过主键列表删除，列表长度不能为0-->
     <delete id="deleteByIds" parameterType="list">
-        delete from operate_order_log where  in
+        delete from operate_order_log where id in
         <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
             #{item}
         </foreach>
     </delete>
     
     <select id="countAll" resultType="int">
-        select count() from operate_order_log
+        select count(id) from operate_order_log
     </select>
     
     <select id="countByEntity" parameterType="com.mawkun.laundry.base.entity.OperateOrderLog" resultType="int">
-        select count() from operate_order_log
+        select count(id) from operate_order_log
         <where>
             <if test="id != null">
                 and id = #{id,jdbcType=INTEGER}
@@ -348,6 +365,9 @@
             </if>
             <if test="description != null">
                 and description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
             </if>
             <if test="createTime != null">
                 and create_time = #{createTime,jdbcType=TIMESTAMP}

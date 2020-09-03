@@ -17,10 +17,10 @@ import com.mawkun.laundry.base.service.ShopService;
 import com.mawkun.laundry.dao.OrderFormDaoExt;
 import com.mawkun.laundry.dao.ShopDaoExt;
 import com.mawkun.laundry.utils.ImageUtils;
+import com.mawkun.laundry.utils.StringUtils;
 import com.mawkun.laundry.utils.TimeUtils;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -107,6 +107,11 @@ public class ShopServiceExt extends ShopService {
             }else{
                 continue;
             }
+            for(Map.Entry<Long, OrderForm> entry : map.entrySet()) {
+                Long shopId = entry.getKey();
+                OrderForm orderForm = entry.getValue();
+            }
+
             ca.add(Calendar.DAY_OF_MONTH,1);
         }
         return orderFormDaoExt.statsShopIncome(query);
@@ -114,13 +119,16 @@ public class ShopServiceExt extends ShopService {
 
     /**
      * 门店列表分业
-     * @param shopQuery
+     * @param query
      * @return
      */
-    public PageInfo pageByEntity(ShopQuery shopQuery) {
-        shopQuery.init();
-        PageHelper.startPage(shopQuery.getPageNo(), shopQuery.getPageSize());
-        List<Shop> list = shopDaoExt.listByEntity(shopQuery);
+    public PageInfo pageByEntity(ShopQuery query) {
+        query.init();
+        if(!StringUtils.isEmpty(query.getShopName())) {
+            query.setShopName("%" + query.getShopName() + "%");
+        }
+        PageHelper.startPage(query.getPageNo(), query.getPageSize());
+        List<Shop> list = shopDaoExt.listByEntity(query);
         return new PageInfo<Shop>(list);
     }
 

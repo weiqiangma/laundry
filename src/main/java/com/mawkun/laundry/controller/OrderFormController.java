@@ -9,10 +9,16 @@ import com.mawkun.laundry.base.data.vo.OrderFormVo;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.service.OrderFormServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -77,9 +83,17 @@ public class OrderFormController extends BaseController {
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除订单", notes="批量删除订单")
-    public JsonResult deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(String ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = orderFormServiceExt.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = orderFormServiceExt.deleteByIds(idList);
         return sendSuccess(result);
     }
 }

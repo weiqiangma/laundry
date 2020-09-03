@@ -10,13 +10,18 @@ import com.mawkun.laundry.base.data.query.UserQuery;
 import com.mawkun.laundry.base.entity.User;
 import com.mawkun.laundry.service.UserServiceExt;
 import com.mawkun.laundry.spring.annotation.LoginedAuth;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,9 +86,17 @@ public class UserController extends BaseController {
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除用户", notes="批量删除用户")
-    public JsonResult deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(String ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = userServiceExt.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = userServiceExt.deleteByIds(idList);
         return sendSuccess(result);
     }
 

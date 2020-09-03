@@ -4,10 +4,16 @@ import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.OperateOrderLog;
 import com.mawkun.laundry.base.service.OperateOrderLogService;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -62,9 +68,17 @@ public class OperateOrderLogController extends BaseController {
     }
 
     @DeleteMapping("/deleteBatch")
-    public JsonResult deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(String ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = operateOrderLogService.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = operateOrderLogService.deleteByIds(idList);
         return sendSuccess(result);
     }
 

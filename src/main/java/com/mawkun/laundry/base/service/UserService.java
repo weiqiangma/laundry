@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.dao.UserDao;
 import com.mawkun.laundry.base.data.query.UserQuery;
 import com.mawkun.laundry.base.entity.User;
+import com.mawkun.laundry.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +35,12 @@ public class UserService {
     }
 
     public List<User> listByEntity(User user) {
+        if(!StringUtils.isEmpty(user.getUserName())) {
+            user.setUserName("%" + user.getUserName() + "%");
+        }
+        if(!StringUtils.isEmpty(user.getMobile())) {
+            user.setMobile("%" + user.getMobile() + "%");
+        }
         return userDao.listByEntity(user);
     }
 

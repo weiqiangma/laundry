@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.dao.ShopDao;
 import com.mawkun.laundry.base.data.query.ShopQuery;
 import com.mawkun.laundry.base.entity.Shop;
+import com.mawkun.laundry.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +35,9 @@ public class ShopService {
     }
 
     public List<Shop> listByEntity(Shop shop) {
+        if(!StringUtils.isEmpty(shop.getShopName())) {
+            shop.setShopName("%" + shop.getShopName() + "%");
+        }
         return shopDao.listByEntity(shop);
     }
 

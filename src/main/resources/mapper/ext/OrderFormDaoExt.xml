@@ -56,8 +56,24 @@
     WHERE ofm.id=#{id}
     </select>
 
-    <select id="selectList" resultMap="com.mawkun.laundry.base.dao.OrderFormDao.OrderFormResultMap" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
-        select * from order_form
+    <resultMap type="com.mawkun.laundry.base.data.vo.OrderFormVo" id="OrderFormVoResultMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+        <result property="distributorId" column="distributor_id" jdbcType="INTEGER"/>
+        <result property="orderSerial" column="order_serial" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="NUMERIC"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="OTHER"/>
+        <result property="realAmount" column="real_amount" jdbcType="NUMERIC"/>
+        <result property="totalAmount" column="total_amount" jdbcType="NUMERIC"/>
+        <result property="transportWay" column="transport_way" jdbcType="OTHER"/>
+        <result property="integral" column="integral" jdbcType="INTEGER"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time" jdbcType="OTHER"/>
+    </resultMap>
+    <select id="selectList" resultMap="OrderFormVoResultMap" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
+        select *,DATE_FORMAT(ofm.create_time,'${formatCode}') as type from order_form
         <where>
             <if test="shopId != null">
             and shop_id = #{shopId}

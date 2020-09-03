@@ -6,12 +6,17 @@ import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.query.KindQuery;
 import com.mawkun.laundry.base.entity.Kind;
 import com.mawkun.laundry.service.KindServiceExt;
+import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.cglib.core.CollectionUtils;
+import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,9 +85,17 @@ public class KindController extends BaseController {
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除商品类型", notes="批量删除商品类型")
-    public JsonResult deleteBatch(@RequestBody List<Long> ids){
+    public JsonResult deleteBatch(String ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = kindServiceExt.deleteByIds(ids);
+        List<String> idArray = Arrays.asList(ids.split(","));
+        List idList = new ArrayList<>();
+        idList = CollectionUtils.transform(idArray, new Transformer() {
+            @Override
+            public Object transform(Object o) {
+                return Convert.toInt(o, 0);
+            }
+        });
+        if (idList.size()>0) result = kindServiceExt.deleteByIds(idList);
         return sendSuccess(result);
     }
 
