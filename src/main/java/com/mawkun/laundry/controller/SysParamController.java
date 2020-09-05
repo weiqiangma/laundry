@@ -4,9 +4,12 @@ import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.mawkun.laundry.base.entity.SysParam;
 import com.mawkun.laundry.base.service.SysParamService;
+import com.mawkun.laundry.service.SysParamServiceExt;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 /**
@@ -19,42 +22,42 @@ import java.util.List;
 public class SysParamController extends BaseController {
     
     @Autowired
-    private SysParamService sysParamService;
+    private SysParamServiceExt sysParamServiceExt;
 
     @GetMapping("/get")
     public JsonResult getById(Long id) {
-        SysParam sysParam = sysParamService.getById(id);
+        SysParam sysParam = sysParamServiceExt.getById(id);
         return sendSuccess(sysParam);
     }
 
     @GetMapping("/list")
     public JsonResult list(SysParam sysParam) {
-        List<SysParam> sysParamList = sysParamService.listByEntity(sysParam);
+        List<SysParam> sysParamList = sysParamServiceExt.listByEntity(sysParam);
         return sendSuccess(sysParamList);
     }
 
     @PostMapping("/insert")
     public JsonResult insert(SysParam sysParam){
-        sysParamService.insert(sysParam);
+        sysParamServiceExt.insert(sysParam);
         return sendSuccess(sysParam);
     }
 
     @PutMapping("/update")
-    public JsonResult update(SysParam sysParam){
-        int result = sysParamService.update(sysParam);
+    public JsonResult update(SysParam sysParam, @RequestParam(value = "files", required = false)MultipartFile[] files){
+        int result = sysParamServiceExt.updateWithPic(sysParam, files);
         return sendSuccess(result);
     }
 
     @DeleteMapping("/delete")
     public JsonResult deleteOne(Long id){
-        int result = sysParamService.deleteById(id);
+        int result = sysParamServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
     @DeleteMapping("/deleteBatch")
     public int deleteBatch(@RequestBody List<Long> ids){
         int result = 0;
-        if (ids!=null&&ids.size()>0) result = sysParamService.deleteByIds(ids);
+        if (ids!=null&&ids.size()>0) result = sysParamServiceExt.deleteByIds(ids);
         return result;
     }
 

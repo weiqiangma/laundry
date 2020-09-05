@@ -5,6 +5,7 @@ import cn.pertech.common.utils.RandomUtils;
 import cn.pertech.common.utils.RequestUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.dao.ShopDao;
@@ -21,11 +22,14 @@ import com.mawkun.laundry.dao.ShopDaoExt;
 import com.mawkun.laundry.utils.ImageUtils;
 import com.mawkun.laundry.utils.StringUtils;
 import com.mawkun.laundry.utils.TimeUtils;
+import com.mysql.cj.xdevapi.JsonArray;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sun.security.util.ArrayUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -94,7 +98,7 @@ public class ShopServiceExt extends ShopService {
         fillQueryData(query);
         List<OrderFormVo> list = orderFormDaoExt.selectList(query);
         //根据type进行分组
-        Map<String, OrderFormVo> dataMap = list.stream().collect(Collectors.toMap(OrderFormVo::getType, m->m));
+        Map<String, List<OrderFormVo>> dataMap = list.stream().collect(Collectors.groupingBy(OrderFormVo::getType));
         Date sTime = query.getStartTime();
         Date eTime = query.getEndTime();
         Calendar ca = Calendar.getInstance();
@@ -111,17 +115,27 @@ public class ShopServiceExt extends ShopService {
             }else{
                 continue;
             }
-            OrderFormVo formVo = dataMap.get(key);
-            String shopName = (formVo == null) ? "" : formVo.getShopName();
-            Double amount = (formVo == null) ? 0 : formVo.getTotalAmount();
-            OrderFormVo vo = new OrderFormVo();
-            vo.setShopName(shopName);
-            vo.setRealAmount(amount);
-            JSONObject object = new JSONObject();
-            object.put("shopName", shopName);
-            object.put("amount", amount);
-            object.put("time", key);
-            array.add(object);
+            JSONArray voArray = new JSONArray();
+            JSONObject voObject = new JSONObject();
+            List<OrderFormVo> formVoList = dataMap.get(key);
+            if(formVoList != null && formVoList.size() > 0) {
+                for (OrderFormVo vo : formVoList) {
+                    String shopName = vo.getShopName();
+                    Double amount = vo.getTotalAmount();
+                    JSONObject object = new JSONObject();
+                    object.put("shopName", shopName);
+                    object.put("amount", amount);
+                    voArray.add(object);
+                }
+            } else {
+                JSONObject object = new JSONObject();
+                object.put("shopName", "");
+                object.put("amount", "");
+                voArray.add(object);
+            }
+            voObject.put("time", key);
+            voObject.put("list", voArray);
+            array.add(voObject);
             ca.add(Calendar.DAY_OF_MONTH,1);
         }
         return array;
