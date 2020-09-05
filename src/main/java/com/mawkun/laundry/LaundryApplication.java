@@ -8,6 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @SpringBootApplication
+@ComponentScan("com.mawkun")
 @MapperScan(basePackages = {"com.mawkun.laundry.base.dao", "com.mawkun.laundry.dao"})
 public class LaundryApplication {
 

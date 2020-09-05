@@ -32,6 +32,6 @@ public interface OrderFormDaoExt extends OrderFormDao {
      *
      * @return
      */
-    List<OrderForm> selectList(StateQuery query);
+    List<OrderFormVo> selectList(StateQuery query);
     
 }

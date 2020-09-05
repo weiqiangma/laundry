@@ -15,7 +15,7 @@ import java.util.List;
  */
 @RestController
 @Api(tags={"系统参数操作接口"})
-@RequestMapping("/sysParam")
+@RequestMapping("/adm/sysParam")
 public class SysParamController extends BaseController {
     
     @Autowired

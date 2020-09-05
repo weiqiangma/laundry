@@ -60,6 +60,7 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+        <result property="shopName" column="shop_name"/>
         <result property="distributorId" column="distributor_id" jdbcType="INTEGER"/>
         <result property="orderSerial" column="order_serial" jdbcType="VARCHAR"/>
         <result property="price" column="price" jdbcType="NUMERIC"/>
@@ -73,14 +74,24 @@
         <result property="createTime" column="create_time" jdbcType="OTHER"/>
     </resultMap>
     <select id="selectList" resultMap="OrderFormVoResultMap" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
-        select *,DATE_FORMAT(ofm.create_time,'${formatCode}') as type from order_form
+        SELECT
+        ofm.shop_id,
+        sp.shop_name,
+        SUM( ofm.total_amount ) total_amount,
+        DATE_FORMAT( ofm.create_time, '${formatCode}' ) AS type
+        FROM
+        order_form ofm
+        LEFT JOIN shop sp ON ofm.shop_id = sp.id
         <where>
-            <if test="shopId != null">
-            and shop_id = #{shopId}
+            <if test="shopId != null and shopId > 0">
+                and shop_id = #{shopId}
             </if>
             <if test="startTime != null and endTime != null">
-            and create_time &gt;= #{startTime} and create_time &lt;= #{endTime}
+                and ofm.create_time between #{startTime} and #{endTime}
             </if>
         </where>
+        GROUP BY
+        type,
+        shop_id
     </select>
 </mapper>

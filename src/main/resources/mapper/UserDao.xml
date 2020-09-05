@@ -39,13 +39,13 @@
                 and id = #{id,jdbcType=INTEGER}
             </if>
             <if test="userName != null">
-                and user_name = #{userName,jdbcType=VARCHAR}
+                and user_name like #{userName,jdbcType=VARCHAR}
             </if>
             <if test="realName != null">
-                and real_name = #{realName,jdbcType=VARCHAR}
+                and real_name like #{realName,jdbcType=VARCHAR}
             </if>
             <if test="mobile != null">
-                and mobile = #{mobile,jdbcType=VARCHAR}
+                and mobile like #{mobile,jdbcType=VARCHAR}
             </if>
             <if test="address != null">
                 and address = #{address,jdbcType=VARCHAR}

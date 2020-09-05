@@ -3,6 +3,7 @@ package com.mawkun.laundry.service;
 import cn.pertech.common.utils.DateUtils;
 import cn.pertech.common.utils.RandomUtils;
 import cn.pertech.common.utils.RequestUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,6 +12,7 @@ import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
 import com.mawkun.laundry.base.data.query.ShopQuery;
 import com.mawkun.laundry.base.data.query.StateQuery;
+import com.mawkun.laundry.base.data.vo.OrderFormVo;
 import com.mawkun.laundry.base.entity.OrderForm;
 import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.base.service.ShopService;
@@ -88,14 +90,16 @@ public class ShopServiceExt extends ShopService {
      * @param query
      * @return
      */
-    public List<ShopIncomeData> statsShopIncome(StateQuery query) {
+    public JSONArray statsShopIncome(StateQuery query) {
         fillQueryData(query);
-        List<OrderForm> list = orderFormDaoExt.selectList(query);
-        Map<Long, OrderForm> map = list.stream().collect(Collectors.toMap(OrderForm::getShopId, Function.identity()));
+        List<OrderFormVo> list = orderFormDaoExt.selectList(query);
+        //根据type进行分组
+        Map<String, OrderFormVo> dataMap = list.stream().collect(Collectors.toMap(OrderFormVo::getType, m->m));
         Date sTime = query.getStartTime();
         Date eTime = query.getEndTime();
         Calendar ca = Calendar.getInstance();
         ca.setTime(sTime);
+        JSONArray array = new JSONArray();
         for(int i = 0; i < query.getDateCount(); i++) {
             String key = "";
             if(query.getType()==1){
@@ -107,14 +111,20 @@ public class ShopServiceExt extends ShopService {
             }else{
                 continue;
             }
-            for(Map.Entry<Long, OrderForm> entry : map.entrySet()) {
-                Long shopId = entry.getKey();
-                OrderForm orderForm = entry.getValue();
-            }
-
+            OrderFormVo formVo = dataMap.get(key);
+            String shopName = (formVo == null) ? "" : formVo.getShopName();
+            Double amount = (formVo == null) ? 0 : formVo.getTotalAmount();
+            OrderFormVo vo = new OrderFormVo();
+            vo.setShopName(shopName);
+            vo.setRealAmount(amount);
+            JSONObject object = new JSONObject();
+            object.put("shopName", shopName);
+            object.put("amount", amount);
+            object.put("time", key);
+            array.add(object);
             ca.add(Calendar.DAY_OF_MONTH,1);
         }
-        return orderFormDaoExt.statsShopIncome(query);
+        return array;
     }
 
     /**

@@ -67,7 +67,7 @@ public class LoginController extends BaseController {
     public JsonResult export(User user, HttpServletResponse response) {
         List<User> list = userServiceExt.listByEntity(user);
         try(OutputStream outputStream = response.getOutputStream()) {
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("用户统计.xlsx", "UTF-8"));
+            //response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("用户统计.xlsx", "UTF-8"));
             EasyExcel.write(outputStream, User.class).sheet("用户统计").doWrite(list);
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,6 +3,7 @@ package com.mawkun.laundry.controller;
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import cn.pertech.common.utils.RequestUtils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageInfo;
 import com.mawkun.laundry.base.data.ShopIncomeData;
 import com.mawkun.laundry.base.data.query.ShopIncomeQuery;
@@ -119,8 +120,8 @@ public class ShopController extends BaseController {
     @ApiOperation(value="统计门店收入", notes="统计门店收入")
     public JsonResult statsShopIncome() {
         StateQuery query = this.createQueryStateVo();
-        List<ShopIncomeData> list = shopServiceExt.statsShopIncome(query);
-        return sendSuccess(list);
+        JSONArray array = shopServiceExt.statsShopIncome(query);
+        return sendSuccess(array);
     }
 
     //查询统计对象(首页统计)
@@ -129,6 +130,7 @@ public class ShopController extends BaseController {
         HttpServletRequest request = getRequest();
         Date start = null;
         Date end = null;
+        Integer shopId = RequestUtils.getIntPar(request, "shopId", 0);
         try{
             start = RequestUtils.getDatePar(request,"createTimeStart","yyyy-MM-dd");
             end = RequestUtils.getDatePar(request,"createTimeEnd","yyyy-MM-dd");
@@ -136,6 +138,7 @@ public class ShopController extends BaseController {
             log.error("开始和结束错误时间格式错误");
         }
         StateQuery queryVO = new StateQuery();
+        queryVO.setShopId(shopId.longValue());
         if(start!=null && end!=null){
             type = 4 ;
             queryVO.setStartTime(start);

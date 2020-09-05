@@ -1,0 +1,4 @@
+1.钉钉内网穿透
+./ding -config=./ding.cfg -subdomain=域名 端口
+2.jar包后台运行
+nohup java -jar laundry-0.0.1-SNAPSHOT.jar >temp.log 2>&1 &
