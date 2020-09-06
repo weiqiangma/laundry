@@ -1,6 +1,7 @@
 package com.mawkun.laundry.service;
 
 import com.mawkun.laundry.base.dao.SysParamDao;
+import com.mawkun.laundry.base.entity.Shop;
 import com.mawkun.laundry.base.entity.SysParam;
 import com.mawkun.laundry.base.service.SysParamService;
 import com.mawkun.laundry.utils.ImageUtils;
@@ -16,8 +17,22 @@ public class SysParamServiceExt extends SysParamService {
 
     public int updateWithPic(SysParam param, MultipartFile[] files) {
         if(files != null && files.length > 0) {
-            String imagePath = ImageUtils.uploadImages(files);
-            param.setSysValue(imagePath);
+            String images = "";
+            SysParam sysParam = sysParamDao.getById(param.getId());
+            String newImage = ImageUtils.uploadImages(files);
+            StringBuilder strBuilder = new StringBuilder();
+            if(param.getSysValue() != null) {
+                //已有的图片如果有删除会传还存在的picture
+                images = strBuilder.append(param.getSysValue()).append(",").append(newImage).toString();
+            } else{
+                //已有的图片没动，查数据库中是否存在picture，有就在其后添加，没有新增
+                if(sysParam.getSysValue() != null) {
+                    images =strBuilder.append(sysParam.getSysValue()).append(",").append(newImage).toString();
+                } else {
+                    images = newImage;
+                }
+            }
+            param.setSysValue(images);
         }
         return sysParamDao.update(param);
     }

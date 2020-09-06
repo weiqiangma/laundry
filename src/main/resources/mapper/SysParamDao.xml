@@ -7,10 +7,11 @@
         <result property="aliasName" column="alias_name" jdbcType="VARCHAR"/>
         <result property="realName" column="real_name" jdbcType="VARCHAR"/>
         <result property="sysValue" column="sys_value" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="OTHER"/>
     </resultMap>
 
     <sql id="table_field">
-      id, alias_name, real_name, sys_value      
+      id, alias_name, real_name, sys_value, status      
     </sql>
        
     <!--通过Id查询单个-->
@@ -40,6 +41,9 @@
             <if test="sysValue != null">
                 and sys_value = #{sysValue,jdbcType=VARCHAR}
             </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
+            </if>
         </where>
     </select>
 
@@ -60,6 +64,9 @@
             </if>
             <if test="sysValue != null">
                 and sys_value = #{sysValue,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
             </if>
         </where>
     </select>
@@ -91,6 +98,9 @@
           <if test="sysValue != null">
              sys_value,
           </if>
+          <if test="status != null">
+             status,
+          </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
           <if test="id != null">
@@ -105,16 +115,19 @@
           <if test="sysValue != null">
              #{sysValue,jdbcType=VARCHAR},
           </if>
+          <if test="status != null">
+             #{status,jdbcType=OTHER},
+          </if>
         </trim>
     </insert>
 
     <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into sys_param
-         (id, alias_name, real_name, sys_value)
+         (id, alias_name, real_name, sys_value, status)
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-         (#{item.id,jdbcType=INTEGER}, #{item.aliasName,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.sysValue,jdbcType=VARCHAR})
+         (#{item.id,jdbcType=INTEGER}, #{item.aliasName,jdbcType=VARCHAR}, #{item.realName,jdbcType=VARCHAR}, #{item.sysValue,jdbcType=VARCHAR}, #{item.status,jdbcType=OTHER})
         </foreach>
     </insert>
 
@@ -130,6 +143,9 @@
             </if>
             <if test="sysValue != null and sysValue != ''">
                 sys_value = #{sysValue,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=OTHER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -148,6 +164,9 @@
             <if test="where.sysValue == null and set.sysValue != null and set.sysValue != ''">
                 sys_value = #{set.sysValue,jdbcType=VARCHAR},
             </if>
+            <if test="where.status == null and set.status != null">
+                status = #{set.status,jdbcType=OTHER},
+            </if>
         </set>
         <where>
             <if test="where.id != null">
@@ -161,6 +180,9 @@
             </if>
             <if test="where.sysValue != null">
                 and sys_value = #{where.sysValue,jdbcType=VARCHAR}
+            </if>
+            <if test="where.status != null">
+                and status = #{where.status,jdbcType=OTHER}
             </if>
         </where>
     </update>
@@ -182,6 +204,11 @@
             <trim prefix="sys_value = case" suffix="end,">
                  <foreach collection="list" item="item" index="index">
                   when id = #{item.id} then #{item.sysValue}
+                 </foreach>
+            </trim>
+            <trim prefix="status = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                  when id = #{item.id} then #{item.status}
                  </foreach>
             </trim>
         </trim>
@@ -208,6 +235,9 @@
             </if>
             <if test="sysValue != null">
                 and sys_value = #{sysValue,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
             </if>
         </where>
     </delete>
@@ -238,6 +268,9 @@
             </if>
             <if test="sysValue != null">
                 and sys_value = #{sysValue,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=OTHER}
             </if>
         </where>
     </select>

@@ -1,11 +1,11 @@
 package com.mawkun.laundry.base.entity;
 
 import lombok.Data;
-                /**
+                    /**
  * (SysParam)实体类
  *
  * @author mawkun
- * @date 2020-09-02 20:37:50
+ * @date 2020-09-05 23:40:20
  */
 @Data 
 public class SysParam {
@@ -17,5 +17,7 @@ public class SysParam {
         private String realName;
     
         private String sysValue;
+    
+        private Object status;
 
 }

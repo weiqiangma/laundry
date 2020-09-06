@@ -27,6 +27,9 @@ public interface Constant {
     int ORDER_STATUS_SURE_TAKE = 6;     //已完成
     int ORDER_STATUS_INVALID = 7;       //无效订单
 
+    //=============================系统参数状态=============================//
+    int SYS_PARAM_OPEN = 1;     //开启
+    int SYS_PARAM_CLOSE = 0;    //关闭
     //=============================系统用户状态=============================
     //用户登录和请求token权限返回状态
     int LOGIN_NOTFIND = 40000;

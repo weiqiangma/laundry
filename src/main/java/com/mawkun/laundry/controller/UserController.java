@@ -18,6 +18,7 @@ import net.sf.cglib.core.Transformer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
@@ -80,7 +81,8 @@ public class UserController extends BaseController {
     @ResponseBody
     @PutMapping("/update")
     @ApiOperation(value="编辑用户", notes="编辑用户")
-    public JsonResult update(User user){
+    public JsonResult update(@LoginedAuth @ApiIgnore UserSession session, User user){
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权编辑用户");
         int result = userServiceExt.update(user);
         return sendSuccess(result);
     }
@@ -115,7 +117,9 @@ public class UserController extends BaseController {
     public void export(User user, HttpServletResponse response) {
         List<User> list = userServiceExt.listByEntity(user);
         try(OutputStream outputStream = response.getOutputStream()) {
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("教职工考勤统计.xls", "UTF-8"));
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode("教职工考勤统计.xlsx", "UTF-8"));
             EasyExcel.write(outputStream, User.class).sheet("用户统计").doWrite(list);
         } catch (Exception e) {
             e.printStackTrace();

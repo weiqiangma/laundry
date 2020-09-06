@@ -16,6 +16,7 @@ import net.sf.cglib.core.CollectionUtils;
 import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +57,8 @@ public class OrderFormController extends BaseController {
 
     @GetMapping("pageList")
     @ApiOperation(value="订单列表分页", notes="订单列表分页")
-    public JsonResult pageList(OrderFormQuery query) {
+    public JsonResult pageList(@LoginedAuth @ApiIgnore UserSession session, OrderFormQuery query) {
+        if(session.getShopId() > 0) query.setShopId(session.getShopId());
         PageInfo page = orderFormServiceExt.pageByEntity(query);
         return sendSuccess(page);
     }

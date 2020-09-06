@@ -76,7 +76,9 @@
     <select id="selectList" resultMap="OrderFormVoResultMap" parameterType="com.mawkun.laundry.base.data.query.StateQuery">
         SELECT
         ofm.shop_id,
-        sp.shop_name,
+        <if test="shopId != null and shopId > 0">
+            sp.shop_name,
+        </if>
         SUM( ofm.total_amount ) total_amount,
         DATE_FORMAT( ofm.create_time, '${formatCode}' ) AS type
         FROM
@@ -91,7 +93,9 @@
             </if>
         </where>
         GROUP BY
-        type,
-        shop_id
+        type
+        <if test="shopId != null and shopId > 0">
+            ,shop_id
+        </if>
     </select>
 </mapper>

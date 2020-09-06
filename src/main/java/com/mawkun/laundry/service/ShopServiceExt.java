@@ -98,9 +98,8 @@ public class ShopServiceExt extends ShopService {
         fillQueryData(query);
         List<OrderFormVo> list = orderFormDaoExt.selectList(query);
         //根据type进行分组
-        Map<String, List<OrderFormVo>> dataMap = list.stream().collect(Collectors.groupingBy(OrderFormVo::getType));
+        Map<String, OrderFormVo> dataMap = list.stream().collect(Collectors.toMap(OrderFormVo::getType, m->m));
         Date sTime = query.getStartTime();
-        Date eTime = query.getEndTime();
         Calendar ca = Calendar.getInstance();
         ca.setTime(sTime);
         JSONArray array = new JSONArray();
@@ -115,27 +114,15 @@ public class ShopServiceExt extends ShopService {
             }else{
                 continue;
             }
-            JSONArray voArray = new JSONArray();
-            JSONObject voObject = new JSONObject();
-            List<OrderFormVo> formVoList = dataMap.get(key);
-            if(formVoList != null && formVoList.size() > 0) {
-                for (OrderFormVo vo : formVoList) {
-                    String shopName = vo.getShopName();
-                    Double amount = vo.getTotalAmount();
-                    JSONObject object = new JSONObject();
-                    object.put("shopName", shopName);
-                    object.put("amount", amount);
-                    voArray.add(object);
-                }
-            } else {
-                JSONObject object = new JSONObject();
-                object.put("shopName", "");
-                object.put("amount", "");
-                voArray.add(object);
-            }
-            voObject.put("time", key);
-            voObject.put("list", voArray);
-            array.add(voObject);
+            OrderFormVo form = dataMap.get(key);
+            JSONObject object = new JSONObject();
+            String shopName = (form == null) ? "" : form.getShopName();
+            if(query.getShopId() == null) shopName = "";
+            Double amount = (form == null) ? 0 : form.getTotalAmount();
+            object.put("time", key);
+            object.put("shopName", shopName);
+            object.put("amount", amount);
+            array.add(object);
             ca.add(Calendar.DAY_OF_MONTH,1);
         }
         return array;

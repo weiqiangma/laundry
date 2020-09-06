@@ -3,10 +3,12 @@ package com.mawkun.laundry.controller;
 import cn.pertech.common.abs.BaseController;
 import cn.pertech.common.spring.JsonResult;
 import com.github.pagehelper.PageInfo;
+import com.mawkun.laundry.base.data.UserSession;
 import com.mawkun.laundry.base.data.query.OperateOrderLogQuery;
 import com.mawkun.laundry.base.entity.OperateOrderLog;
 import com.mawkun.laundry.base.service.OperateOrderLogService;
 import com.mawkun.laundry.service.OperateOrderLogServiceExt;
+import com.mawkun.laundry.spring.annotation.LoginedAuth;
 import com.xiaoleilu.hutool.convert.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import net.sf.cglib.core.CollectionUtils;
 import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +57,8 @@ public class OperateOrderLogController extends BaseController {
 
     @GetMapping("/pageList")
     @ApiOperation(value="订单日志列表分页", notes="订单日志列表分页")
-    public JsonResult pageList(OperateOrderLogQuery query) {
+    public JsonResult pageList(@LoginedAuth @ApiIgnore UserSession session, OperateOrderLogQuery query) {
+        if(session.getShopId() > 0) query.setShopId(session.getShopId());
         PageInfo<OperateOrderLog> page = operateOrderLogServiceExt.pageList(query);
         return sendSuccess(page);
     }

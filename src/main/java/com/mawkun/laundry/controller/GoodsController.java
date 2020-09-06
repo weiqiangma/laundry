@@ -17,6 +17,7 @@ import net.sf.cglib.core.Transformer;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +66,8 @@ public class GoodsController extends BaseController {
 
     @PostMapping("/insert")
     @ApiOperation(value="添加商品", notes="添加商品")
-    public JsonResult insert(Goods goods, MultipartFile file){
+    public JsonResult insert(@LoginedAuth @ApiIgnore UserSession session, Goods goods, MultipartFile file){
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权添加商品");
         if(file.isEmpty() || goods.getGoodsName() == null) return sendError("缺少参数");
         List<Goods> goodsList = goodsServiceExt.getByName(goods.getGoodsName());
         if(!goodsList.isEmpty()) return sendError("该商品名称已存在，请勿重复添加");
@@ -75,7 +77,8 @@ public class GoodsController extends BaseController {
 
     @PutMapping("/update")
     @ApiOperation(value="编辑商品", notes="编辑商品")
-    public JsonResult update(Goods goods, MultipartFile file){
+    public JsonResult update(@LoginedAuth @ApiIgnore UserSession session,Goods goods, MultipartFile file){
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权编辑商品");
         List<Goods> goodsList = goodsServiceExt.getByName(goods.getGoodsName());
         if(goodsList.size() > 1) return sendError("该商品名称已存在，请勿重复添加");
         int result = goodsServiceExt.updateWithPic(goods, file);
@@ -84,15 +87,17 @@ public class GoodsController extends BaseController {
 
     @DeleteMapping("/delete")
     @ApiOperation(value="删除商品", notes="删除商品")
-    public JsonResult deleteOne(Long id){
+    public JsonResult deleteOne(@LoginedAuth @ApiIgnore UserSession session,Long id){
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权删除商品");
         int result = goodsServiceExt.deleteById(id);
         return sendSuccess(result);
     }
 
     @DeleteMapping("/deleteBatch")
     @ApiOperation(value="批量删除商品", notes="批量删除商品")
-    public JsonResult deleteBatch(String ids){
+    public JsonResult deleteBatch(@LoginedAuth @ApiIgnore UserSession session,String ids){
         int result = 0;
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权删除商品");
         List<String> idArray = Arrays.asList(ids.split(","));
         List idList = new ArrayList<>();
         idList = CollectionUtils.transform(idArray, new Transformer() {

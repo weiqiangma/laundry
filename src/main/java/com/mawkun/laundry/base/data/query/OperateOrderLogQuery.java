@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class OperateOrderLogQuery extends OperateOrderLog {
+    private Long shopId;
     private Integer pageNo;
     private Integer pageSize;
 

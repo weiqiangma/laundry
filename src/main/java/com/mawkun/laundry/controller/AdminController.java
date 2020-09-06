@@ -45,7 +45,7 @@ public class AdminController extends BaseController {
     @GetMapping("/getByEntity")
     @ApiOperation(value="多条件获取admin", notes="多条件获取admin")
     public JsonResult getByEntity(@LoginedAuth @ApiIgnore UserSession session, Admin admin) {
-        if(session.getShopId() > 0) admin.setId(session.getId());
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权查看");
         Admin resultAdmin = adminServiceExt.getByEntity(admin);
         return sendSuccess(resultAdmin);
     }
@@ -53,14 +53,15 @@ public class AdminController extends BaseController {
     @GetMapping("/list")
     @ApiOperation(value="获取admin集合", notes="根据条件获取admin")
     public JsonResult list(@LoginedAuth @ApiIgnore UserSession session, Admin admin) {
-        if(session.getShopId() > 0) admin.setId(session.getId());
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权查看");
         List<Admin> adminList = adminServiceExt.listByEntity(admin);
         return sendSuccess(adminList);
     }
 
     @GetMapping("/pageList")
     @ApiOperation(value="管理员列表分页", notes="管理员列表分页")
-    public JsonResult pageList(AdminQuery query) {
+    public JsonResult pageList(@LoginedAuth @ApiIgnore UserSession session, AdminQuery query) {
+        if(session.getShopId() > 0) return sendArgsError("子管理员无权查看");
         PageInfo page = adminServiceExt.pageByEntity(query);
         return sendSuccess(page);
     }
